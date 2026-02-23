@@ -49,6 +49,7 @@
 | **claude-code-probleme** | https://github.com/RangRang416/claude-code-probleme.git | ✅ Troubleshooting ⚡ NEU |
 | **vorgangs-manager** | https://github.com/RangRang416/vorgangs-manager.git | ✅ Vorgangs- & Archiv-App (LIVE) |
 | **agentic-workflow** | https://github.com/RangRang416/agentic-workflow.git | ✅ Subagenten-Workflow PoC ⚡ NEU |
+| **claude-root-config** | https://github.com/RangRang416/claude-root-config.git | ✅ Root-Config (private) ⚡ NEU |
 
 **Wichtig:** Alle Repos können gepusht werden, immer VORHER fragen!
 
@@ -224,13 +225,12 @@ Alle Projekte müssen:
 
 ## 📝 Recent Changes (2026-02-23)
 
-### Scout-Agent: 7. Rolle im Subagenten-System
+### Scout-Agent + Root-Config portabel gemacht
 - **Neuer Agent: Scout (Haiku)** — Codebase-Erkundung und Kontext-Vorfilterung
-- **Erstellt:** `.claude/agents/scout.md` (nativ) + `agentic-workflow/templates/scout.md` (Doku)
-- **Rechte:** NUR Lesen/Suchen (Read, Glob, Grep, WebFetch, WebSearch)
 - **Erster Test:** Vorgangs-Manager erkundet — ~$0.01 statt ~$0.14 (93% Ersparnis)
-- **CLAUDE.md:** Rechte-Matrix um Scout + Spalte "Lesen/Suchen" erweitert
 - **Jetzt 7 Agenten:** Scout, Planner, Implementer, Tester, Reviewer, Documenter, Deployer
+- **`/root/.claude/` als Git-Repo:** Agenten, Memory, Scripts, Doku portabel für 2. Computer
+- **Neues Repo:** `claude-root-config` (private) — Whitelist-basierte .gitignore (Secrets ausgeschlossen)
 
 ### Vorherige: Agentic Workflow Feinschliff + Progressive Disclosure
 - **Native Agenten:** `.claude/agents/` mit YAML-Frontmatter (6 Agenten)
