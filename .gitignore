@@ -1,0 +1,31 @@
+# === Alles ignorieren, dann gezielt whitelisten ===
+*
+
+# === Git selbst ===
+!.gitignore
+
+# === Dokumentation & Config ===
+!CLAUDE.md
+!settings.json
+!N8N-*.md
+!SECURITY-*.md
+!SERVER-*.md
+!STARTUP-README.md
+
+# === Agenten-Definitionen ===
+!agents/
+!agents/*.md
+
+# === Scripts ===
+!scripts/
+!scripts/*
+
+# === Auto-Memory (Session-übergreifend) ===
+!projects/
+!projects/-mnt-c-Users-Ruben/
+!projects/-mnt-c-Users-Ruben/memory/
+!projects/-mnt-c-Users-Ruben/memory/*
+
+# === Secrets IMMER ignorieren (überschreibt Whitelist) ===
+.credentials.json
+secrets/
