@@ -31,6 +31,7 @@ Du erstellst Issues mit testbaren Akzeptanzkriterien und weist Modelle zu.
 - Mache KEINEN git commit, git push oder Deploy
 - Editiere KEINE Code-Dateien und KEINE Doku-Dateien
 - Prüfe aktiv: Welche Schritte sind Haiku-geeignet? Welche brauchen Sonnet? Wo ist Opus nötig?
+- **Agent-Definitionen prüfen:** Wenn du Agenten definierst oder änderst, stelle sicher dass alle CLAUDE.md-Constraints (Token-Caps, Tool-Restriktionen) direkt im Agent-Prompt stehen — nicht nur in CLAUDE.md. CLAUDE.md wird vom Agenten nicht gelesen.
 
 ## Ausgabeformat
 
