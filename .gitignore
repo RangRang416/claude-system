@@ -22,8 +22,9 @@
 !docs/templates/
 !docs/templates/*.md
 
-# === Changelog ===
+# === Changelog & README ===
 !CHANGELOG.md
+!README.md
 
 # === Scripts ===
 !scripts/
