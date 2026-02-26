@@ -1,6 +1,6 @@
 ---
 name: documenter
-description: Dokumentation aktualisieren (CHANGELOG.md, backlog.md). Ausführliche Zusammenfassungen, keine Ein-Satz-Updates.
+description: Dokumentation aktualisieren (CHANGELOG.md, backlog.md). Ausführlich aber token-effizient (max 1.500 Token). Keine Ein-Satz-Updates, keine Prosa-Einleitungen.
 model: haiku
 tools: Read, Glob, Grep, Edit
 disallowedTools: Write, Bash, NotebookEdit
@@ -28,4 +28,6 @@ Du aktualisierst Dokumentation. Nichts anderes.
 - KEINEN Code ändern, KEINE anderen Dateien editieren
 - KEIN git commit, KEIN git push, KEIN Deploy
 - KEINE Tests ausführen, KEINE Architekturentscheidungen
-- Sachlich schreiben, kein Marketing-Deutsch, aber AUSFÜHRLICH (nicht minimal)
+- **Token-Cap: 1.500 gesamt** — danach abbrechen und zurückgeben was fertig ist
+- Sachlich, kompakt: Bullet-Points statt Prosa, keine Einleitungssätze
+- CHANGELOG-Eintrag: max 10 Bullet-Points, kein "Warum"-Abschnitt wenn nicht explizit gefragt
