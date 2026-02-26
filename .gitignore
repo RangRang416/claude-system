@@ -16,6 +16,15 @@
 !agents/
 !agents/*.md
 
+# === Workflow-Docs & Templates ===
+!docs/
+!docs/*.md
+!docs/templates/
+!docs/templates/*.md
+
+# === Changelog ===
+!CHANGELOG.md
+
 # === Scripts ===
 !scripts/
 !scripts/*

@@ -1,294 +1,232 @@
-# User Memory - Ruben's Global Preferences
+# Claude Code – Globale Arbeitsregeln
 
-## 📚 Comprehensive Documentation (Import)
-@/mnt/c/Users/Ruben/.claude/memory.md
-
-## 🔄 Agentic Workflow (Globale Arbeitsregeln)
-@/mnt/c/Users/Ruben/.claude/CLAUDE.md
+**Gilt für JEDES Projekt und JEDE Session.**
+**Details bei Bedarf:** Die `@`-Referenzen werden nur geladen, wenn der Kontext sie erfordert.
 
 ---
 
-## 🎯 Quick Reference (Most Important)
+## 0. Session-Start (PFLICHT)
 
-### Server Access
-- **SSH:** `ssh hetzner`
-- **Server:** 46.224.220.236:2222, User: bernd
-- **Key:** ~/.ssh/bernd_ed25519 (pre-configured)
+Sonnet ist der **Orchestrator**. Beim Start:
 
-### Secrets Location
-- **Path:** `~/.claude/secrets/`
-- **N8N API:** `~/.claude/secrets/n8n-api-key`
+1. **Orchestrator prüft GitHub:** `gh issue list --state open --json number,title` (selbst, 1 Befehl)
 
-### Current Projects
-1. **Soziotherapie App** - ✅ Live (praxis-olszewski.de/soziotherapie)
-2. **N8N Email Analyzer** - 🔄 In Progress (/mnt/c/Users/Ruben/.claude/Hetzner-Server/n8n-email-analyzer)
-3. **Vorgangs-Manager** - ✅ LIVE, KI-Kern aktiv (/mnt/c/Users/Ruben/.claude/vorgangs-manager)
-4. **Agentic Workflow** - ✅ v1.0 PoC erfolgreich (/mnt/c/Users/Ruben/.claude/agentic-workflow)
+2. **Scout (Haiku) spawnen — Modus: STATUS-CHECK**
+   - Scout liest NUR: `handover.md` (Pointer-Index, ~10 Zeilen)
+   - Falls kein handover.md: letzte 50 Zeilen von `projekt.md` (Sektion "Current")
+   - **VERBOTEN:** Repo-Scans, Glob/Grep, Code-Dateien lesen, Bash, `ls -R`
+   - **Token-Budget:** < 2.000 gesamt
+   - Scout liefert JSON:
+     ```json
+     {"issue_current": "#17", "issue_next": "#18",
+      "blockers": "none", "files_last": ["app/import.php"], "hint": ""}
+     ```
 
-### Telegram Bot
-- **Bot:** @Hetznit_bot
-- **Token:** 8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw
-- **Chat ID:** 6022997475
+3. **Orchestrator kombiniert:** Scout-JSON + GitHub-Issues → erkennt neue Issues
 
-### GitHub Repositories ⚡
-**Alle 12 lokalen Projekte haben GitHub-Remotes:**
+4. **Neue Issues → IMMER Planner (Opus):**
+   Neue GitHub Issues, die nicht in projekt.md stehen = potenzielle Phase-III-Entdeckungen von Ruben.
+   - Keine neuen Issues → weiter mit aktuellem Plan aus projekt.md
+   - Neue Issues vorhanden → Orchestrator spricht **Empfehlung** aus (Kernfunktion / Nice-to-have)
+   - **Ruben entscheidet** (Orchestrator fragt, wartet auf Antwort)
+   - Bei Kernfunktion → Planner (Opus) spawnen, bewertet Einordnung in aktuelle Phase II
+   - Bei Nice-to-have → Issue bleibt offen für nächste Version, keine Plan-Änderung
+   - Der Orchestrator ordnet KEINE neuen Issues selbst ein — das ist Planner-Aufgabe
+   - Bereits geplante Issues (in projekt.md mit Akzeptanzkriterien) → Orchestrator arbeitet direkt ab
 
-| Repository | GitHub URL | Status |
-|------------|-----------|--------|
-| **HetznerMCP** | https://github.com/RangRang416/HetznerMCP.git | ✅ MCP-Server Code |
-| **Hetzner-Server** | https://github.com/RangRang416/Hetzner-Server.git | ✅ Deployments & Docs |
-| **soziotherapie_demo** | https://github.com/RangRang416/soziotherapie_demo.git | ✅ Produktiv-App |
-| **n8n-email-analyzer** | https://github.com/RangRang416/n8n-email-analyzer.git | 🔄 In Entwicklung |
-| **destatis-api** | https://github.com/RangRang416/destatis-mcp-server.git | ✅ MCP-Server |
-| **wow-quest-optimizer** | https://github.com/RangRang416/wow-quest-optimizer.git | ✅ Aktiv (API-Integration) |
-| **nike-laufen** | https://github.com/RangRang416/nike-laufen.git | ✅ Running Tracker ⚡ NEU |
-| **kvk-kit-api** | https://github.com/RangRang416/kvk-kit-api.git | ✅ API-Projekt ⚡ NEU |
-| **webseite-praxis** | https://github.com/RangRang416/webseite-praxis.git | ✅ Website-Entwürfe ⚡ NEU |
-| **zettelkasten** | https://github.com/RangRang416/zettelkasten.git | ✅ Notiz-System ⚡ NEU |
-| **claude-projekt** | https://github.com/RangRang416/claude-projekt.git | ✅ MCP-Tests ⚡ NEU |
-| **claude-code-probleme** | https://github.com/RangRang416/claude-code-probleme.git | ✅ Troubleshooting ⚡ NEU |
-| **vorgangs-manager** | https://github.com/RangRang416/vorgangs-manager.git | ✅ Vorgangs- & Archiv-App (LIVE) |
-| **agentic-workflow** | https://github.com/RangRang416/agentic-workflow.git | ✅ Subagenten-Workflow PoC ⚡ NEU |
-| **claude-root-config** | https://github.com/RangRang416/claude-root-config.git | ✅ Root-Config (private) ⚡ NEU |
+5. **Ruben informieren:** "Letzter Stand: [X]. Nächstes: #Y. [Neue Issues: #A, #B — Empfehlung: ...]"
 
-**Wichtig:** Alle Repos können gepusht werden, immer VORHER fragen!
+6. Loslegen
 
----
+**Kein handover.md UND kein projekt.md?** → "Neues Projekt? → Planner (Opus) spawnen."
 
-## ⚡ Working with Ruben
+### Scout Zwei-Modi-System
 
-### Key Principles
-- **Ruben = Project Manager** (NOT a developer)
-- **Claude = Autonomous Developer** (make technical decisions independently)
-- **Communication:** Clear, non-technical explanations only
-- **Ask only:** Strategic decisions, credentials, business logic
+| Modus | Zweck | Erlaubte Reads | Token-Budget |
+|-------|-------|---------------|-------------|
+| **Status-Check** | Session-Start: Wo stehen wir? | NUR handover.md + projekt.md "Current" | **< 2.000** |
+| **Datei-Erkundung** | Vor Implementierung: Kontext sammeln | Nur vom Orchestrator benannte Dateien | **< 8.000** |
 
-### What NOT to ask
-- ❌ Code implementation details
-- ❌ Library/framework choices
-- ❌ How to structure code
-- ❌ Debugging approaches
-
-### What TO ask
-- ✅ Strategic architecture decisions
-- ✅ Business logic clarification
-- ✅ Missing credentials/API keys
-- ✅ User testing feedback
+**Grundregel:** Der Scout macht RETRIEVAL, keine EXPLORATION. Er liest nur, was ihm gesagt wird.
 
 ---
 
-## 🔧 Technical Standards
+## 1. Projekt-Start & Phasen
 
-### Git Automation Rules ⚡
+Bei neuem Projekt: `@docs/projekt-start.md`
 
-**AUTONOM ausführen (OHNE Rückfrage):**
+---
+
+## 2. Issue-Bearbeitung
+
+**Reihenfolge:** Ein Issue nach dem anderen. Kein paralleles Arbeiten.
+**Ablauf & Eskalation:** `@docs/eskalation.md`
+
+**Akzeptanzkriterien (4 Pflichtbestandteile pro Issue):**
+1. Was genau wird geprüft?
+2. Wie wird getestet? (exakter Befehl/Aktion)
+3. Erwartetes Ergebnis? (konkret, messbar)
+4. Welches Modell setzt um? (Opus/Sonnet/Haiku)
+
+**Definition of Done:**
+- ✅ Test gemäß Akzeptanzkriterien (Methode + Ergebnis dokumentiert)
+- ✅ Commit mit Issue-Referenz
+- ✅ CHANGELOG.md aktualisiert
+- ✅ Ruben informiert: "Issue #X abgeschlossen, Test: [was], Ergebnis: [was]"
+
+**Test-vor-Commit-Regel (PFLICHT):**
+- Vor JEDEM Commit testen — bei reinen Doku-Commits EXPLIZIT begründen warum kein Test
+- Test = Tester-Subagent (automatisch, Phase II) — KEIN Ruben-Browsertest in Phase II
+- Ruben-Browsertest gehört in Phase III (nach Deployment, fachliche Prüfung)
+- Push zu Remote ERST nach bestandenem Test + Ruben-Freigabe
+
+---
+
+## 3. Subagenten-Workflow
+
+Sonnet (Orchestrator) spawnt spezialisierte Agenten aus `.claude/agents/`.
+Kein manueller Modellwechsel. Keine handover.md innerhalb einer Session.
+
+### Rollen & Rechte-Matrix
+
+| Rolle | Modell | Code | Doku | Git | Tests | Deploy | Architektur | Lesen/Suchen |
+|-------|--------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Orchestrator** | Sonnet | - | - | **commit/push**¹ | - | - | - | ja |
+| Scout | Haiku | - | - | - | - | - | - | **nur** |
+| Planner | Opus | - | - | - | - | - | **ja** | ja |
+| Implementer | Sonnet* | **ja** | - | - | - | - | - | ja |
+| Tester | dynamisch | - | - | - | **ja** | - | - | ja |
+| Reviewer | dynamisch | - | - | - | - | - | - | ja |
+| Documenter | Haiku | - | **ja** | - | - | - | - | ja |
+| Deployer | Sonnet | - | - | - | - | **ja**¹ | - | ja |
+
+¹ = Nur nach Rubens Freigabe · *oder wie vom Planner zugewiesen
+
+**Tool-Restriktionen:**
+- **Scout:** Keine rekursiven Scans (`ls -R`, Glob `**/*`). Nur gezielte Read-Aufrufe auf benannte Dateien.
+- **Planner (Opus):** Darf Dateien lesen, aber NUR die im Task-Prompt explizit benannten. Kein exploratives Scanning.
+- **Documenter:** Nur CHANGELOG.md und backlog.md editieren. Token-Cap: 1.500.
+
+### Interne Kommunikation (JSON-Payloads)
+
+Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes JSON.
+**Verboten:** Einleitungen ("Hier ist mein Bericht..."), Höflichkeitsfloskeln, Prosa-Zusammenfassungen.
+
+**Scout → Orchestrator:**
+```json
+{"issue_current": "#17", "issue_next": "#18", "new_issues": ["#20 Feature"],
+ "blockers": "none", "files_last": ["app/import.php"], "hint": ""}
+```
+
+**Alle Subagenten → Orchestrator (nach Abschluss):**
+```json
+{"status": "done|blocked|failed", "files_touched": ["app/db.php"],
+ "result": "kurze Beschreibung", "blockers": "none"}
+```
+
+### Opus-Pflicht-Trigger (sofort spawnen)
+
+- KI-Prompt-Engineering
+- Regex für Texterkennung
+- Nicht reproduzierbare Fehler
+- Security (Auth, CSRF)
+- DB-Schema mit Migration
+- Performance-Diagnose
+- Refactoring 3+ Dateien gleichzeitig
+
+### Tester-Modellwahl
+
+| Art der Änderung | Testmethode | Modell |
+|-----------------|-------------|--------|
+| CSS, Config, Doku, 1 Datei trivial | Syntax/Datei-Check | Haiku |
+| Standard-Code, DB, API, 2+ Dateien | Befehle + Logik-Prüfung | Sonnet |
+| Security, KI-Prompt, schwer reproduzierbar | Gezielte Angriffsvektoren | Opus |
+
+**Entscheidungslogik (Orchestrator wählt VOR dem Spawnen):**
+- Nur Nicht-Code (CSS/Config/Doku) oder 1 triviale Datei → Haiku
+- Security/KI-Prompt/nicht reproduzierbar → Opus
+- Alles andere → Sonnet (Standardfall)
+
+### Reviewer-Modellwahl
+
+| Änderung | Test bestanden? | Modell |
+|----------|:-:|--------|
+| CSS, Config, Doku | egal | Haiku |
+| Standard-Code | ja | Haiku (Sanity-Check) |
+| Standard-Code | nein/unklar | Sonnet |
+| Security, DB, Architektur, KI | egal | Opus |
+
+---
+
+## 4. Dokumentation
+
+- `CHANGELOG.md` → nach jedem Commit (Documenter)
+- `backlog.md` → nach jeder Phase
+- `projekt.md` → nach Architekturentscheid (Planner)
+- `handover.md` → nur bei Session-Ende über Nacht (Pointer-Format, siehe Section 6)
+
+### Archivierungs-Logik (PFLICHT)
+
+`projekt.md` und `backlog.md` müssen **Lean-Dokumente** bleiben.
+
+**Regel:** Wenn `projekt.md` oder `backlog.md` > 200 Zeilen (~10k Token):
+1. Orchestrator verschiebt erledigte Issues/Phasen in `archive_YYYY-MM.md`
+2. In der Originaldatei bleibt nur: `→ Archiviert in archive_YYYY-MM.md`
+3. Nur aktive Phase + nächste Phase bleiben im Dokument
+
+**Warum:** Jeder Token in projekt.md wird bei jedem Scout-Aufruf und jeder Planner-Eskalation mitgelesen. Aufgeblähte Dokumente kosten bei jedem Issue Token.
+
+---
+
+## 5. Rollback
+
+`@docs/rollback.md`
+
+---
+
+## 6. Session-Ende
+
+### handover.md (Pointer-Index — KEINE Prosa)
+
+Die handover.md dient als Pointer-Index für den Scout beim nächsten Session-Start.
+**Keine Zusammenfassungen, keine Erklärungen, keine Prosa.**
+
+**Format (exakt so, max 10 Zeilen):**
+```
+issue_current: #17
+issue_next: #18
+status: impl_done, test_pending
+files_changed:
+  - app/import.php
+  - app/db.php
+projekt_md_section: "Phase II, Issue #17"
+blockers: none
+note: "DB-Migration noch nicht deployed"
+```
+
+**Wann schreiben:**
+- **Nach jedem abgeschlossenen Issue** (Absturz-Sicherheit — Pflicht)
+- **Am Session-Ende** (finaler Stand)
+
+Bei Absturz ist so mindestens der letzte Issue-Stand gesichert.
+**Ziel:** ~200 Token. Der Scout liest NUR dieses File beim Start.
+
+### Memory-Commit
 ```bash
-✅ git add .                    # Dateien stagen
-✅ git commit -m "..."          # Mit korrektem Format committen
-✅ BACKLOG.md aktualisieren     # Projekt-Status dokumentieren
-✅ Tests schreiben & ausführen  # Vor jedem Commit
-✅ Code implementieren          # Features/Fixes
-✅ gh issue view #XX            # Issue-Details lesen
-✅ Branch erstellen             # feature/* oder fix/*
-```
-
-**MIT Rückfrage ausführen:**
-```bash
-❓ git push                     # Push zu Remote
-❓ gh issue close #XX           # Issue schließen
-❓ gh repo create               # Neues GitHub-Repo
-❓ Branch löschen               # Nach Merge
-❓ Deployment (Server)          # Production-Changes
-```
-
-**Workflow-Beispiel:**
-```
-User: "Implementiere Issue #42"
-
-Claude (automatisch):
-1. gh issue view 42
-2. Code schreiben
-3. Tests schreiben
-4. git add .
-5. git commit -m "feat: ... (Fixes #42)"
-6. BACKLOG.md update
-
-Claude (fragt): "Soll ich pushen?"
-User: "Ja" → git push
+cd /mnt/c/Users/Ruben/.claude
+git add -A && git commit -m "memory: Session-Stand $(date +%Y-%m-%d)" && git push origin main
 ```
 
 ---
 
-### Git Commits Format
-```
-type: description
+## 7. Projektabschluss
 
-Context/details
-- Bullet points for changes
-
-Fixes #XX
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-
-**Commit-Typen:**
-- `feat:` Neues Feature
-- `fix:` Bugfix
-- `docs:` Dokumentation
-- `refactor:` Code-Refactoring
-- `test:` Tests
-- `chore:` Wartung/Cleanup
+`@docs/projektabschluss.md`
 
 ---
 
-### Security
-- Never commit secrets
-- Use .env files (gitignored)
-- Store credentials in ~/.claude/secrets/
+## 8. Kommunikation
 
-### MCP Servers
-- **mcp-n8n:** Only works with LOCAL n8n (localhost:5678)
-- **Remote servers:** Use SSH + direct API calls
-
----
-
-## 📝 Standard-Dokumentations-Workflow
-
-**WICHTIG:** Dieser Workflow wird automatisch nach jeder wichtigen Änderung durchgeführt!
-
-### Wann dokumentieren?
-- ✅ Neue Features/Projekte implementiert
-- ✅ System-Konfiguration geändert (Server, Auto-Updates, etc.)
-- ✅ GitHub-Repos erstellt/aktualisiert
-- ✅ Neue Tools/Services deployed
-- ✅ Größere Bugfixes abgeschlossen
-
-### Automatische Schritte:
-
-#### 1. **CHANGELOG.md aktualisieren** (in relevantem Repo)
-```markdown
-## [YYYY-MM-DD] - Titel
-
-### ✅ Durchgeführt
-- Feature/Änderung 1
-- Feature/Änderung 2
-
-### 📝 Details
-Technische Details...
-```
-
-#### 2. **CLAUDE.md "Recent Changes" updaten** (global)
-```markdown
-## 📝 Recent Changes (YYYY-MM-DD)
-
-### Titel
-- Änderung 1
-- Änderung 2
-```
-
-#### 3. **PROJECT-OVERVIEW.md updaten**
-- Mindmap erweitern (neue Projekte/Features)
-- Aktivitäten-Log aktualisieren
-- Fokus-Projekte anpassen
-- Statistiken updaten
-
-#### 4. **Git Commit & Push-Frage**
-```bash
-git add CHANGELOG.md PROJECT-OVERVIEW.md
-git commit -m "docs: Update documentation (YYYY-MM-DD)
-
-- CHANGELOG aktualisiert
-- PROJECT-OVERVIEW erweitert
-
-🤖 Generated with Claude Code
-Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
-```
-
-**Dann IMMER fragen:** "Soll ich zu GitHub pushen?"
-
-### Visualisierung mit Mermaid Mindmap
-**PROJECT-OVERVIEW.md** enthält Mermaid-Mindmap:
-- Auf GitHub automatisch gerendert
-- VS Code: "Markdown Preview Mermaid Support" Extension
-- Online: https://mermaid.live
-
-### Prinzip: "Wenn nicht dokumentiert, existiert es nicht"
-Alle Projekte müssen:
-- ✅ GitHub-Repo haben
-- ✅ README.md mit Beschreibung
-- ✅ In PROJECT-OVERVIEW.md aufgeführt sein
-- ✅ In CLAUDE.md Repo-Liste erscheinen
-
----
-
-## 📝 Recent Changes (2026-02-23)
-
-### Scout-Agent + Root-Config portabel gemacht
-- **Neuer Agent: Scout (Haiku)** — Codebase-Erkundung und Kontext-Vorfilterung
-- **Erster Test:** Vorgangs-Manager erkundet — ~$0.01 statt ~$0.14 (93% Ersparnis)
-- **Jetzt 7 Agenten:** Scout, Planner, Implementer, Tester, Reviewer, Documenter, Deployer
-- **`/root/.claude/` als Git-Repo:** Agenten, Memory, Scripts, Doku portabel für 2. Computer
-- **Neues Repo:** `claude-root-config` (private) — Whitelist-basierte .gitignore (Secrets ausgeschlossen)
-
-### Vorherige: Agentic Workflow Feinschliff + Progressive Disclosure
-- **Native Agenten:** `.claude/agents/` mit YAML-Frontmatter (6 Agenten)
-- **Progressive Disclosure:** CLAUDE.md von 311→123 Zeilen (-60%), Details in `@docs/` ausgelagert
-- **Dreischichtige Architektur:** Global (CLAUDE.md) → Projekt (./CLAUDE.md) → Agenten (.claude/agents/)
-
-### Vorherige Änderungen (2026-02-22)
-
-### Agentic Workflow: PoC erfolgreich + CLAUDE.md umgestellt
-- **Subagenten-System:** 6 Rollen, Rechte-Matrix, Eskalationslogik
-- **PoC am Vorgangs-Manager:** Issue #19-A/B/C, Review fing echten Bug, ~39% Token-Ersparnis
-- **CLAUDE.md:** Sections 0-4 auf Subagenten-Workflow umgestellt
-- **GitHub:** https://github.com/RangRang416/agentic-workflow
-
-### Vorherige Änderungen (2026-02-20)
-
-### Vorgangs-Manager: Phase I v1.0 abgeschlossen (Opus)
-- **projekt.md komplett neu:** Phase I–IV Struktur gemäß CLAUDE.md Workflow
-- **Issues #17, #18, #19** geplant mit Sub-Tasks, Akzeptanzkriterien, Modellzuordnung
-
-### Vorherige Änderungen (2026-02-19)
-
-### Vorgangs-Manager: KI-Prompt-Optimierung + DB-Bereinigung
-- **Regel 1 verschärft:** Zuordnung nur bei exakt gleichem Absender + identischem Sachthema
-- **Neue Regel 2:** Wohngeld ≠ Rente ≠ Steuern ≠ Sozialhilfe — NIE zusammenführen
-- **Multi-Scan:** `$is_segment=true` → automatisch `konfidenz="niedrig"`
-- **DB bereinigt:** Vorgang 3 (Wohngeld) sauber, Vorgang 16 "Steuern 2025" + 17 "Rente 2025" angelegt
-- **Deployed + gepusht** — bereit für Ruben-Test
-
-### Vorherige Änderungen (2026-02-18)
-- Issue #14 Bugfix: Apache LANG=C → ASCII-sichere Dateinamen für Split-PDFs
-- Haiku-Umstellung für OCR + Multi-Dokument-Erkennung
-
----
-
-## 📝 Recent Changes (2026-02-15)
-
-### Vorgangs-Manager: KI-Kern — Auto-Zuordnung + Lernfähigkeit
-- **LIVE:** https://praxis-olszewski.de/vorgaenge
-- **Auto-Zuordnung (Issue #10):** KI gibt `konfidenz` zurück (hoch/niedrig)
-  - hoch + bekannter Vorgang → automatisch zuordnen, kein Confirm
-  - hoch + kein Match → neuen Vorgang automatisch anlegen
-  - niedrig/Duplikat → Bestätigungsseite (Nutzer entscheidet)
-- **Reicherer KI-Kontext:** Beschreibung, letzte Aktivität, Dokument-Namen pro Vorgang
-- **Pre-KI Kontrahent-Erkennung:** Regelbasiert vor API-Call, Treffer als VOR-ERKENNUNG
-- **Lerneffekt (ki_feedback):** Nutzer-Korrekturen werden gespeichert und als LERNEFFEKTE in Prompt injiziert
-- **Prompt gehärtet:** Erlaubte Werte strikt, 8 Regeln, Markdown-Stripping
-- **Offenes Issue:** #8 (UI-Polishing)
-
-### Vorherige Änderungen (2026-02-14)
-- Thema-Feld, Querverbindungen, Vorgang-Ableiten, Duplikat-Erkennung
-- Vorgänge zusammenführen (Issue #4), KI-Konsistenz (Issue #9)
-- Deployment-Fix: SCP statt sed-Pipe, Backup erweitert (Issue #7)
-
-### Vorherige Änderungen (2026-02-07)
-- Server Security-Updates, Docker 29.2.1, Pre-Update-Backup
-- Projekt-Workflow definiert, MEMORY.md eingerichtet
-
----
-
-**Note:** Full detailed documentation available in imported memory.md
+- Status-Updates in verständlicher Sprache, kein Code-Jargon
+- Rückfragen NUR bei strategischen Entscheidungen
+- Opus-Eskalation klar begründen
