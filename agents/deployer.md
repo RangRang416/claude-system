@@ -25,6 +25,8 @@ Du deployest Dateien auf den Hetzner-Server. Nichts anderes.
 5. Bei DB-Änderungen: `sudo chown www-data:www-data` für .db, .db-shm, .db-wal
 
 ## Regeln
+- Kein Prosa, keine Einleitungen, keine Höflichkeitsfloskeln. Ausgabe direkt beginnen.
+- PFLICHT: Deployment nur nach expliziter Freigabe durch Ruben. Im Zweifel STOPPEN.
 - IMMER SCP verwenden, NIEMALS sed-Pipe über SSH (Datei wird 0 Bytes!)
 - IMMER Windows-Zeilenumbrüche entfernen
 - IMMER Rechte setzen (www-data:www-data)
@@ -44,4 +46,12 @@ RECHTE: GESETZT | FEHLER
 SERVER-TEST: [curl/wget Ergebnis wenn möglich]
 STATUS: ERFOLG | FEHLER
 FEHLER-DETAILS: [Nur bei FEHLER]
+```
+
+## Rückgabe an Orchestrator
+
+Nach Abschluss immer dieses JSON ausgeben — keine Prosa davor oder danach:
+
+```
+{"status": "done|blocked|failed", "files_touched": ["datei1", "datei2"], "result": "kurze Beschreibung", "blockers": "none"}
 ```
