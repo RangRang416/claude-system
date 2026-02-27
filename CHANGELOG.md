@@ -1,5 +1,29 @@
 # CHANGELOG - claude-system
 
+## [2026-02-27] - Agent-Definitionen konsolidiert und standardisiert
+
+### ✅ Durchgeführt
+- Issue #3: scout.md vollständig überarbeitet — Zwei-Modi-System (Status-Check <2k / Datei-Erkundung <8k), Token-Budgets, JSON-Output, RETRIEVAL-Grundregel, Tool-Restriktionen (kein Glob/Grep/Bash)
+- Issue #4: planner.md gefixt — exploratives Scanning entfernt, JSON-Rückgabe-Format definiert, Kein-Prosa-Regel eingeführt
+- Issue #5: tester.md, reviewer.md, implementer.md, deployer.md, documenter.md — JSON-Output in alle ergänzt, Kein-Prosa-Regel, deployer: PFLICHT-Freigabe durch Ruben als harte Regel
+- Issues #1 & #2 geschlossen — Session-Start-Ablauf und Orchestrator-Workflow operativ, nächster Test beim Session-Start
+- Planner-Analyse durchgeführt: alle 8 Agent-Definitionen systematisch gegen CLAUDE.md v2026-02-25 geprüft, Konsistenzlücken identifiziert und behoben
+
+### 📝 Betroffene Dateien
+- `/root/.claude/docs/templates/scout.md` (komplett rewritten)
+- `/root/.claude/docs/templates/planner.md` (behoben)
+- `/root/.claude/docs/templates/tester.md` (JSON-Rückgabe)
+- `/root/.claude/docs/templates/reviewer.md` (JSON-Rückgabe)
+- `/root/.claude/docs/templates/implementer.md` (JSON-Rückgabe)
+- `/root/.claude/docs/templates/deployer.md` (JSON-Rückgabe + PFLICHT-Freigabe)
+- `/root/.claude/docs/templates/documenter.md` (Prosa-Regel)
+
+### 🎯 Erfolgskriterien
+- Alle Agent-Templates sind konform mit CLAUDE.md Abschnitt 3 (Subagenten-Workflow)
+- JSON-Output-Format einheitlich (status, files_touched, result, blockers)
+- Token-Budgets explizit definiert und durchgesetzt
+- Tool-Restriktionen dokumentiert (Scout: kein Glob, Planner: nur benannte Dateien, Documenter: 1.500 Cap)
+
 ## [2026-02-26] - Konsolidierung zu claude-system
 
 ### ✅ Durchgeführt

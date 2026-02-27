@@ -68,6 +68,15 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-02-27) — Agent-Definitionen konform mit CLAUDE.md
+- **Planner-Analyse:** Alle 7 Agenten systematisch gegen CLAUDE.md geprüft
+- **Scout (#3):** Komplett neu — Zwei-Modi, Token-Budgets, JSON-Output, RETRIEVAL-Grundregel
+- **Planner (#4):** Widerspruch Glob/Grep entfernt, JSON-Rückgabe, Kein-Prosa
+- **Alle 5 restlichen Agenten (#5):** JSON-Rückgabe + Kein-Prosa überall; Deployer: PFLICHT-Freigabe
+- **Erkenntnis:** Agenten lesen CLAUDE.md nicht — Constraints müssen direkt im Agent-Prompt stehen
+- **Workflow bewährt:** Planner → Implementer → Tester → Reviewer → Commit (korrekt durchgehalten)
+- **Documenter:** Token-Cap jetzt im Prompt verankert (war nur in CLAUDE.md)
+
 ## Letzte Session (2026-02-26) — Konsolidierung zu claude-system
 - **Neues Repo:** `claude-system` (https://github.com/RangRang416/claude-system)
 - **Struktur:** CLAUDE.md (agentic workflow), agents/ (7), docs/ (4 Docs + 8 Templates)
