@@ -1,5 +1,19 @@
 # CHANGELOG - claude-system
 
+## [2026-02-28] — Scout-Agent entfernt
+
+### Entfernt
+- `agents/scout.md` — Scout-Subagent abgeschafft (18-20k Token Overhead pro Spawn)
+- Scout aus Rechte-Matrix, Tool-Restriktionen und Kommunikationsbeispielen in CLAUDE.md
+
+### Geändert
+- Session-Start (Sektion 0): Orchestrator liest `handover.md` und `projekt.md` direkt (~500 Token statt ~20.000)
+- Schritte in Sektion 0: von 6 auf 5 reduziert
+- Documenter-Scope: Negativliste ergänzt (CLAUDE.md, projekt.md, Workflow-Docs, MEMORY.md = Implementer/Planner)
+
+### Hinzugefügt
+- `docs/projekt-start.md`: Sektion "Bestehendes Projekt übernehmen" mit 8-Schritte-Checkliste
+
 ## [2026-02-27] - Agent-Definitionen konsolidiert und standardisiert
 
 ### ✅ Durchgeführt
