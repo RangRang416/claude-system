@@ -68,9 +68,18 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-02-28) — Scout-Agent entfernt
+- **Erkenntnis:** Jeder Subagent-Spawn kostet ~18-20k Token System-Overhead (Claude Code Basis-Infrastruktur) — nicht kontrollierbar
+- **Scout abgeschafft:** Orchestrator liest handover.md + projekt.md direkt (~500 Token statt ~20k)
+- **Documenter-Scope** klargestellt: Nur CHANGELOG.md + backlog.md. Negativliste in CLAUDE.md verankert.
+- **Neue Checkliste** in projekt-start.md: "Bestehendes Projekt übernehmen" (8 Schritte, kein Scout)
+- **Workflow-Erkenntnis:** Orchestrator macht Status-Check selbst — kein Subagent für triviale Reads
+- **Token-Budget-Realität:** "< 2k" war nie als Gesamt-Budget erreichbar — System-Overhead allein ~18-20k
+- Commit `fd0a47e` + `452fe58` gepusht zu claude-system
+
 ## Letzte Session (2026-02-27) — Agent-Definitionen konform mit CLAUDE.md
 - **Planner-Analyse:** Alle 7 Agenten systematisch gegen CLAUDE.md geprüft
-- **Scout (#3):** Komplett neu — Zwei-Modi, Token-Budgets, JSON-Output, RETRIEVAL-Grundregel (entfernt 2026-02-28)
+- **Scout (#3):** Komplett neu — Zwei-Modi, Token-Budgets, JSON-Output, RETRIEVAL-Grundregel
 - **Planner (#4):** Widerspruch Glob/Grep entfernt, JSON-Rückgabe, Kein-Prosa
 - **Alle 5 restlichen Agenten (#5):** JSON-Rückgabe + Kein-Prosa überall; Deployer: PFLICHT-Freigabe
 - **Erkenntnis:** Agenten lesen CLAUDE.md nicht — Constraints müssen direkt im Agent-Prompt stehen
@@ -87,14 +96,14 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
 
 ## Letzte Session (2026-02-25) — Token-Effizienz + Workflow-Architektur
 - **Token-Effizienz-Overhaul:**
-  - Scout: Zwei-Modi (Status-Check <2k / Datei-Erkundung <8k), JSON-Output, kein Repo-Scan (Scout entfernt 2026-02-28)
+  - Scout: Zwei-Modi (Status-Check <2k / Datei-Erkundung <8k), JSON-Output, kein Repo-Scan
   - handover.md → Pointer-Index (~200 Token, ~10 Zeilen, keine Prosa)
   - JSON-Payloads für alle Subagenten (keine Prosa-Berichte)
-  - Tool-Restriktionen: Planner nur benannte Dateien, Documenter Cap 1.500
+  - Tool-Restriktionen: Scout kein Glob/WebSearch, Planner nur benannte Dateien, Documenter Cap 1.500
   - Archivierungs-Logik: projekt.md/backlog.md > 200 Zeilen → archive_YYYY-MM.md
-- **Session-Start-Ablauf war definiert (überholt 2026-02-28, Scout-Schritt entfernt):**
+- **Session-Start-Ablauf neu definiert:**
   1. Orchestrator: `gh issue list` (selbst, 1 Befehl)
-  2. Scout (Haiku): handover.md lesen → JSON (entfernt 2026-02-28 — Orchestrator liest direkt)
+  2. Scout (Haiku): handover.md lesen → JSON
   3. Orchestrator: kombiniert beides → erkennt neue Issues
   4. Neue Issues → Empfehlung an Ruben → Ruben entscheidet → IMMER Planner (Opus)
   5. Ruben informieren → Loslegen
@@ -103,11 +112,10 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
 - **Absturz-Sicherheit:** handover.md wird nach JEDEM Issue aktualisiert, nicht nur am Session-Ende
 - **6 Commits, 2 Repos gepusht** (claude-root-config bis `2f44a00`, agentic-workflow `d69d6b0`)
 
-## Agentic Workflow Evolution (Zusammenfassung 2026-02-22 bis 2026-02-28)
+## Agentic Workflow Evolution (Zusammenfassung 2026-02-22 bis 2026-02-25)
 - **v0.1 (02-22):** 6 Templates, PoC erfolgreich, ~39% Token-Ersparnis gemessen
-- **v0.2 (02-23):** Native Agenten (.claude/agents/), Progressive Disclosure, Scout als 7. Agent (Scout später entfernt)
+- **v0.2 (02-23):** Native Agenten (.claude/agents/), Progressive Disclosure, Scout als 7. Agent
 - **v0.3 (02-25):** Token-Effizienz, Phase-III-Rückfluss, Planner-Pflicht, Absturz-Sicherheit
-- **v0.4 (02-28):** Scout-Agent entfernt — Orchestrator liest handover.md direkt (~500 Token statt ~20.000)
 
 ## Vorgangs-Manager (Zusammenfassung bis 2026-02-20)
 - **LIVE:** https://praxis-olszewski.de/vorgaenge
