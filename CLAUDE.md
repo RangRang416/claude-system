@@ -11,20 +11,12 @@ Sonnet ist der **Orchestrator**. Beim Start:
 
 1. **Orchestrator prüft GitHub:** `gh issue list --state open --json number,title` (selbst, 1 Befehl)
 
-2. **Scout (Haiku) spawnen — Modus: STATUS-CHECK**
-   - Scout liest NUR: `handover.md` (Pointer-Index, ~10 Zeilen)
+2. **Orchestrator liest Status direkt** (kein Subagent):
+   - `handover.md` lesen (Pointer-Index, ~10 Zeilen)
    - Falls kein handover.md: letzte 50 Zeilen von `projekt.md` (Sektion "Current")
-   - **VERBOTEN:** Repo-Scans, Glob/Grep, Code-Dateien lesen, Bash, `ls -R`
-   - **Token-Budget:** < 2.000 gesamt
-   - Scout liefert JSON:
-     ```json
-     {"issue_current": "#17", "issue_next": "#18",
-      "blockers": "none", "files_last": ["app/import.php"], "hint": ""}
-     ```
+   - Kosten: ~500 Token statt ~20.000 bei Subagent-Spawn
 
-3. **Orchestrator kombiniert:** Scout-JSON + GitHub-Issues → erkennt neue Issues
-
-4. **Neue Issues → IMMER Planner (Opus):**
+3. **Neue Issues → IMMER Planner (Opus):**
    Neue GitHub Issues, die nicht in projekt.md stehen = potenzielle Phase-III-Entdeckungen von Ruben.
    - Keine neuen Issues → weiter mit aktuellem Plan aus projekt.md
    - Neue Issues vorhanden → Orchestrator spricht **Empfehlung** aus (Kernfunktion / Nice-to-have)
@@ -34,20 +26,11 @@ Sonnet ist der **Orchestrator**. Beim Start:
    - Der Orchestrator ordnet KEINE neuen Issues selbst ein — das ist Planner-Aufgabe
    - Bereits geplante Issues (in projekt.md mit Akzeptanzkriterien) → Orchestrator arbeitet direkt ab
 
-5. **Ruben informieren:** "Letzter Stand: [X]. Nächstes: #Y. [Neue Issues: #A, #B — Empfehlung: ...]"
+4. **Ruben informieren:** "Letzter Stand: [X]. Nächstes: #Y. [Neue Issues: #A, #B — Empfehlung: ...]"
 
-6. Loslegen
+5. Loslegen
 
 **Kein handover.md UND kein projekt.md?** → "Neues Projekt? → Planner (Opus) spawnen."
-
-### Scout Zwei-Modi-System
-
-| Modus | Zweck | Erlaubte Reads | Token-Budget |
-|-------|-------|---------------|-------------|
-| **Status-Check** | Session-Start: Wo stehen wir? | NUR handover.md + projekt.md "Current" | **< 2.000** |
-| **Datei-Erkundung** | Vor Implementierung: Kontext sammeln | Nur vom Orchestrator benannte Dateien | **< 8.000** |
-
-**Grundregel:** Der Scout macht RETRIEVAL, keine EXPLORATION. Er liest nur, was ihm gesagt wird.
 
 ---
 
@@ -92,7 +75,6 @@ Kein manueller Modellwechsel. Keine handover.md innerhalb einer Session.
 | Rolle | Modell | Code | Doku | Git | Tests | Deploy | Architektur | Lesen/Suchen |
 |-------|--------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Orchestrator** | Sonnet | - | - | **commit/push**¹ | - | - | - | ja |
-| Scout | Haiku | - | - | - | - | - | - | **nur** |
 | Planner | Opus | - | - | - | - | - | **ja** | ja |
 | Implementer | Sonnet* | **ja** | - | - | - | - | - | ja |
 | Tester | dynamisch | - | - | - | **ja** | - | - | ja |
@@ -103,20 +85,13 @@ Kein manueller Modellwechsel. Keine handover.md innerhalb einer Session.
 ¹ = Nur nach Rubens Freigabe · *oder wie vom Planner zugewiesen
 
 **Tool-Restriktionen:**
-- **Scout:** Keine rekursiven Scans (`ls -R`, Glob `**/*`). Nur gezielte Read-Aufrufe auf benannte Dateien.
 - **Planner (Opus):** Darf Dateien lesen, aber NUR die im Task-Prompt explizit benannten. Kein exploratives Scanning.
-- **Documenter:** Nur CHANGELOG.md und backlog.md editieren. Token-Cap: 1.500.
+- **Documenter:** Nur CHANGELOG.md und backlog.md editieren. Token-Cap: 1.500. Alle anderen Dateien (CLAUDE.md, projekt.md, Workflow-Docs, MEMORY.md) sind Implementer- oder Planner-Aufgaben.
 
 ### Interne Kommunikation (JSON-Payloads)
 
 Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes JSON.
 **Verboten:** Einleitungen ("Hier ist mein Bericht..."), Höflichkeitsfloskeln, Prosa-Zusammenfassungen.
-
-**Scout → Orchestrator:**
-```json
-{"issue_current": "#17", "issue_next": "#18", "new_issues": ["#20 Feature"],
- "blockers": "none", "files_last": ["app/import.php"], "hint": ""}
-```
 
 **Alle Subagenten → Orchestrator (nach Abschluss):**
 ```json
@@ -174,7 +149,7 @@ Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes 
 2. In der Originaldatei bleibt nur: `→ Archiviert in archive_YYYY-MM.md`
 3. Nur aktive Phase + nächste Phase bleiben im Dokument
 
-**Warum:** Jeder Token in projekt.md wird bei jedem Scout-Aufruf und jeder Planner-Eskalation mitgelesen. Aufgeblähte Dokumente kosten bei jedem Issue Token.
+**Warum:** Jeder Token in projekt.md wird bei jeder Planner-Eskalation mitgelesen. Aufgeblähte Dokumente kosten bei jedem Issue Token.
 
 ---
 
@@ -188,7 +163,7 @@ Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes 
 
 ### handover.md (Pointer-Index — KEINE Prosa)
 
-Die handover.md dient als Pointer-Index für den Scout beim nächsten Session-Start.
+Die handover.md dient als Pointer-Index für den Orchestrator beim nächsten Session-Start.
 **Keine Zusammenfassungen, keine Erklärungen, keine Prosa.**
 
 **Format (exakt so, max 10 Zeilen):**
@@ -209,7 +184,7 @@ note: "DB-Migration noch nicht deployed"
 - **Am Session-Ende** (finaler Stand)
 
 Bei Absturz ist so mindestens der letzte Issue-Stand gesichert.
-**Ziel:** ~200 Token. Der Scout liest NUR dieses File beim Start.
+**Ziel:** ~200 Token. Der Orchestrator liest NUR dieses File beim Start.
 
 ### Memory-Commit
 ```bash

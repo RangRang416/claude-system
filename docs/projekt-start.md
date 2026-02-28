@@ -36,3 +36,16 @@ Opus ist die **oberste Instanz** in der Projekt-Hierarchie:
 - Sonnet spawnt Subagenten für jede Aufgabe
 - Liest Opus-Plan aus `projekt.md`, delegiert an den passenden Subagenten
 - Bei Opus-Aufgabe: Planner-Subagent (Opus) spawnen, NICHT selbst versuchen
+
+## Bestehendes Projekt übernehmen
+
+Wenn Claude Code auf ein unbekanntes oder fremdes Repo losgelassen wird, arbeitet der Orchestrator diese Checkliste selbst ab (kein Scout-Subagent):
+
+1. Top-Level-Struktur erfassen: `ls` auf Repo-Root
+2. README.md lesen (falls vorhanden)
+3. Dependency-Datei identifizieren und lesen (package.json / composer.json / requirements.txt / go.mod etc.)
+4. Hauptverzeichnisse lesen (src/, app/, lib/ o.ä.)
+5. Tech-Stack dokumentieren: Sprache, Framework, relevante Bibliotheken
+6. Vorhandene Dokumentation prüfen: CLAUDE.md, projekt.md, handover.md, CHANGELOG.md
+7. Offene GitHub Issues abrufen: `gh issue list --state open --json number,title`
+8. Ergebnis: Orchestrator kann Planner (Opus) mit vollständigem Kontext briefen
