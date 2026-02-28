@@ -51,17 +51,33 @@ Bei neuem Projekt: `@docs/projekt-start.md`
 3. Erwartetes Ergebnis? (konkret, messbar)
 4. Welches Modell setzt um? (Opus/Sonnet/Haiku)
 
-**Definition of Done:**
-- ✅ Test gemäß Akzeptanzkriterien (Methode + Ergebnis dokumentiert)
-- ✅ Commit mit Issue-Referenz
-- ✅ CHANGELOG.md aktualisiert
-- ✅ Ruben informiert: "Issue #X abgeschlossen, Test: [was], Ergebnis: [was]"
+**Definition of Done (nach Klasse):**
+- **A:** ✅ Orchestrator-Selbsttest ✅ Commit ✅ CHANGELOG direkt ✅ Ruben informiert
+- **B:** ✅ Tester (Sonnet) bestanden ✅ Commit ✅ CHANGELOG direkt ✅ Ruben informiert
+- **C:** ✅ Tester bestanden ✅ Reviewer (wenn Security/DB/KI) ✅ Commit ✅ CHANGELOG direkt ✅ Ruben informiert
 
 **Test-vor-Commit-Regel (PFLICHT):**
-- Vor JEDEM Commit testen — bei reinen Doku-Commits EXPLIZIT begründen warum kein Test
-- Test = Tester-Subagent (automatisch, Phase II) — KEIN Ruben-Browsertest in Phase II
+- Klasse A: Orchestrator testet selbst — kein Tester-Subagent
+- Klasse B/C: Tester-Subagent (automatisch) — KEIN Ruben-Browsertest in Phase II
 - Ruben-Browsertest gehört in Phase III (nach Deployment, fachliche Prüfung)
 - Push zu Remote ERST nach bestandenem Test + Ruben-Freigabe
+
+---
+
+### 2.1 Issue-Klassifizierung (Orchestrator entscheidet VOR Bearbeitung)
+
+| Klasse | Kriterien | Pipeline |
+|--------|-----------|----------|
+| **A — Trivial** | 1 Datei, kein neues Verhalten, CSS/Config/Doku/Typo/1-Zeiler | Orchestrator direkt (0 Subagenten) |
+| **B — Standard** | 2–4 Dateien, neue Logik, kein Security/KI/Schema-Change | Implementer → Tester (Sonnet) |
+| **C — Komplex** | 5+ Dateien ODER Security ODER KI ODER DB-Migration ODER nicht reproduzierbar | Planner → Implementer → Tester → Reviewer (nur bei Security/DB/KI) |
+
+**Entscheidungsbaum (2–3 Sekunden):**
+1. Nur 1 Datei UND kein neues Verhalten? → **A**
+2. Security/KI/DB-Schema/5+ Dateien/nicht reproduzierbar? → **C**
+3. Alles andere → **B**
+
+**CHANGELOG:** Orchestrator schreibt immer direkt — kein Subagent-Spawn (Overhead übersteigt Nutzen).
 
 ---
 
@@ -79,14 +95,12 @@ Kein manueller Modellwechsel. Keine handover.md innerhalb einer Session.
 | Implementer | Sonnet* | **ja** | - | - | - | - | - | ja |
 | Tester | dynamisch | - | - | - | **ja** | - | - | ja |
 | Reviewer | dynamisch | - | - | - | - | - | - | ja |
-| Documenter | Haiku | - | **ja** | - | - | - | - | ja |
 | Deployer | Sonnet | - | - | - | - | **ja**¹ | - | ja |
 
 ¹ = Nur nach Rubens Freigabe · *oder wie vom Planner zugewiesen
 
 **Tool-Restriktionen:**
 - **Planner (Opus):** Darf Dateien lesen, aber NUR die im Task-Prompt explizit benannten. Kein exploratives Scanning.
-- **Documenter:** Nur CHANGELOG.md und backlog.md editieren. Token-Cap: 1.500. Alle anderen Dateien (CLAUDE.md, projekt.md, Workflow-Docs, MEMORY.md) sind Implementer- oder Planner-Aufgaben.
 
 ### Interne Kommunikation (JSON-Payloads)
 
@@ -122,20 +136,17 @@ Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes 
 - Security/KI-Prompt/nicht reproduzierbar → Opus
 - Alles andere → Sonnet (Standardfall)
 
-### Reviewer-Modellwahl
+### Reviewer (nur Klasse C)
 
-| Änderung | Test bestanden? | Modell |
-|----------|:-:|--------|
-| CSS, Config, Doku | egal | Haiku |
-| Standard-Code | ja | Haiku (Sanity-Check) |
-| Standard-Code | nein/unklar | Sonnet |
-| Security, DB, Architektur, KI | egal | Opus |
+Nur spawnen wenn: Security ODER DB-Migration ODER KI-Prompt ODER Tester meldet Auffälligkeiten.
+- Security/DB/KI → Opus · Alles andere → Sonnet
+- Klasse A und B: **kein Reviewer**
 
 ---
 
 ## 4. Dokumentation
 
-- `CHANGELOG.md` → nach jedem Commit (Documenter)
+- `CHANGELOG.md` → nach jedem Commit (Orchestrator direkt)
 - `backlog.md` → nach jeder Phase
 - `projekt.md` → nach Architekturentscheid (Planner)
 - `handover.md` → nur bei Session-Ende über Nacht (Pointer-Format, siehe Section 6)
