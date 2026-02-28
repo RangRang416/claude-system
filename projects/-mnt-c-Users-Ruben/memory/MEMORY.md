@@ -68,6 +68,15 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-02-28) — Workflow-Kalibrierung: Klassen A/B/C + Documenter abgeschafft
+- **Drei-Klassen-System eingeführt:** A (Trivial/0 Spawns), B (Standard/2 Spawns), C (Komplex/volle Pipeline)
+- **Documenter-Agent entfernt:** CHANGELOG schreibt Orchestrator direkt (Spawn-Overhead 3× teurer als Direktschreiben)
+- **Reviewer:** nur noch bei Klasse C und nur bei Security/DB/KI
+- **Token-Realität:** Spawn-Overhead ~15k Input-Tokens — unabhängig vom Modell, nicht kontrollierbar
+- **Breakeven:** Subagent lohnt erst ab ~15k Token eigener Arbeit; Scout (500 Token Arbeit) und Documenter (2k) lagen weit darunter
+- **Agenten verbleibend:** Planner (Opus), Implementer (Sonnet), Tester (dynamisch), Reviewer (dynamisch), Deployer (Sonnet)
+- Commits `bd6a122` + `7c3f4ec` gepusht zu claude-system
+
 ## Letzte Session (2026-02-28) — Scout-Agent entfernt
 - **Erkenntnis:** Jeder Subagent-Spawn kostet ~18-20k Token System-Overhead (Claude Code Basis-Infrastruktur) — nicht kontrollierbar
 - **Scout abgeschafft:** Orchestrator liest handover.md + projekt.md direkt (~500 Token statt ~20k)
