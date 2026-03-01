@@ -68,6 +68,16 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-03-01) — Vorgangs-Manager v1.0 abgeschlossen + Workflow-Test
+- **Workflow-Test erfolgreich:** Neues A/B/C-System am echten Projekt validiert
+- **Session-Start:** Orchestrator las handover.md + projekt.md direkt (kein Scout) — funktioniert
+- **Phase III Evaluation:** Opus erkannte 2 Bugs (Auto-Zuordnung + Import-Confirm Feedback)
+- **Bugfixes:** Klasse B → Implementer (Sonnet) + Tester (Sonnet) — kein Reviewer nötig
+- **CHANGELOG:** Orchestrator direkt geschrieben — kein Documenter-Spawn
+- **v1.0 released:** Git-Tag gesetzt, MEMORY_v1.0.md archiviert
+- **Nächstes:** v2.0-Planung (II.5 Komfort+Fristen: #21→#20→#25→#23, danach #26 2FA)
+- **Vorgangs-Manager Repo:** github.com/RangRang416/vorgangs-manager, Branch: master
+
 ## Letzte Session (2026-02-28) — Workflow-Kalibrierung: Klassen A/B/C + Documenter abgeschafft
 - **Drei-Klassen-System eingeführt:** A (Trivial/0 Spawns), B (Standard/2 Spawns), C (Komplex/volle Pipeline)
 - **Documenter-Agent entfernt:** CHANGELOG schreibt Orchestrator direkt (Spawn-Overhead 3× teurer als Direktschreiben)
