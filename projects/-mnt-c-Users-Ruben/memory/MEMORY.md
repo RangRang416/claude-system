@@ -68,6 +68,14 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-03-02) — Vorgangs-Manager #30/#31 + #34 Eval-Set-Start
+- **#30/#31 deployed:** Beschreibungs-Feedback, Prioritäts-Feedback, KI-Prompt Regelwerk (Normal/Wichtig/Dringend + DRINGEND-Präfix für Schritte)
+- **#33 bewertet:** Intelligente Verbindung Aktivität↔Schritte↔Beschreibung = Nice-to-have, v2.0+, Klasse C
+- **#34 gestartet:** Eval-Set für KI-Kern-Kalibrierung — `konfidenz=hoch` ist selbst-deklariert, nie gegen echte Trefferquoten gemessen
+- **#34a + #34d deployed:** /eval/ Infrastruktur + ki_konfidenz-Spalte in ki_feedback
+- **#34 Nächstes:** #34b (Eval-Runner) + #34c (Feedback-Analyse) parallel; Ruben: #34f (25+ Ground-Truth-Docs nach eval/README.md)
+- **DB-Migrations-Muster:** Statische PDO-Variable → automatische Migration schlägt fehl → immer manuell: `sudo -u www-data sqlite3 /var/www/vorgaenge/data/vorgaenge.db 'ALTER TABLE ...'`
+
 ## Letzte Session (2026-03-01) — Vorgangs-Manager v1.0 abgeschlossen + Workflow-Test
 - **Workflow-Test erfolgreich:** Neues A/B/C-System am echten Projekt validiert
 - **Session-Start:** Orchestrator las handover.md + projekt.md direkt (kein Scout) — funktioniert
@@ -75,7 +83,6 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
 - **Bugfixes:** Klasse B → Implementer (Sonnet) + Tester (Sonnet) — kein Reviewer nötig
 - **CHANGELOG:** Orchestrator direkt geschrieben — kein Documenter-Spawn
 - **v1.0 released:** Git-Tag gesetzt, MEMORY_v1.0.md archiviert
-- **Nächstes:** v2.0-Planung (II.5 Komfort+Fristen: #21→#20→#25→#23, danach #26 2FA)
 - **Vorgangs-Manager Repo:** github.com/RangRang416/vorgangs-manager, Branch: master
 
 ## Letzte Session (2026-02-28) — Workflow-Kalibrierung: Klassen A/B/C + Documenter abgeschafft
