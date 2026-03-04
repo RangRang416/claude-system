@@ -68,12 +68,19 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-03-04) — Vorgangs-Manager #34 Eval-Set komplett
+- **batch_export.php deployed:** Verarbeitet PDFs aus /tmp/eval_batch/ → KI-Analyse → eval_NNN.json
+- **#34f abgeschlossen:** 27/30 PDFs aus Dropbox (Schriftverkehr/Öffentlich) verarbeitet, reviewed, verified:true
+  - 3 Scan-PDFs übersprungen (PARSE-FEHLER), 8 kernanliegen leer (Docs ohne verwertbaren Inhalt)
+  - Mapping: eval/doc_mapping.txt zeigt doc_NNN.pdf → Original-Dateiname
+- **Permission-Fix für batch_export.php:** --output /tmp/eval_output/ verwenden (bernd kein Schreibrecht auf /var/www/vorgaenge/eval/)
+- **Nächste Session:** #34b (Eval-Runner) + #34c (ki_feedback-Analyse) parallel starten
+
 ## Letzte Session (2026-03-02) — Vorgangs-Manager #30/#31 + #34 Eval-Set-Start
 - **#30/#31 deployed:** Beschreibungs-Feedback, Prioritäts-Feedback, KI-Prompt Regelwerk (Normal/Wichtig/Dringend + DRINGEND-Präfix für Schritte)
 - **#33 bewertet:** Intelligente Verbindung Aktivität↔Schritte↔Beschreibung = Nice-to-have, v2.0+, Klasse C
 - **#34 gestartet:** Eval-Set für KI-Kern-Kalibrierung — `konfidenz=hoch` ist selbst-deklariert, nie gegen echte Trefferquoten gemessen
 - **#34a + #34d deployed:** /eval/ Infrastruktur + ki_konfidenz-Spalte in ki_feedback
-- **#34 Nächstes:** #34b (Eval-Runner) + #34c (Feedback-Analyse) parallel; Ruben: #34f (25+ Ground-Truth-Docs nach eval/README.md)
 - **DB-Migrations-Muster:** Statische PDO-Variable → automatische Migration schlägt fehl → immer manuell: `sudo -u www-data sqlite3 /var/www/vorgaenge/data/vorgaenge.db 'ALTER TABLE ...'`
 
 ## Letzte Session (2026-03-01) — Vorgangs-Manager v1.0 abgeschlossen + Workflow-Test
