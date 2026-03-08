@@ -83,11 +83,13 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
 - **IMAP-Konto:** Wechsel von `b.n@posteo.de` auf `bozena.olszewski@posteo.de` (App-PW: FA8Rvg8qXprtNQbJEcbV) — dort liegt der Praxis-Alias
 
 ### E-Mail-Import Architektur (Stand v1.5)
-- **Konto:** bozena.olszewski@posteo.de (Posteo IMAP, Port 993)
+- **Konto 1:** b.n@posteo.de — Praxis-Hauptkonto, nur Unterordner (Burdenski etc.), kein Filter (alle Mails)
+- **Konto 2:** bozena.olszewski@posteo.de — Privatkonto Frau, INBOX+Unterordner, Filter: praxis.olszewski@posteo.de ODER soziotherapie
 - **Cron:** `*/30 * * * * www-data php /var/www/vorgaenge/app/email_import.php`
-- **Filter-Reihenfolge:** Dedup → Praxis-Relevanz (Alias ODER soziotherapie) → Newsletter → Body-Extraktion → KI (Haiku) → Auto-Assign/Queue
+- **Filter-Reihenfolge:** Dedup → Praxis-Relevanz (per Konto) → Newsletter → Body-Extraktion → KI (Haiku) → Auto-Assign/Queue
 - **Telegram:** @Hetznit_bot, Chat-ID 6022997475, Token in .env
 - **Kosten:** Haiku statt Sonnet → ~Cent/Monat für 1-5 Mails/Tag
+- **API-Limit:** Anthropic-Guthaben aufgebraucht, Reset 2026-04-01
 
 ### Vorgangs-Manager Stand v1.5
 - **2FA:** TOTP aktiv für User "ruben"
