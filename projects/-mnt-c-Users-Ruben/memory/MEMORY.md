@@ -68,12 +68,45 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
+## Letzte Session (2026-03-08) — Vorgangs-Manager v1.5 — E-Mail-Import + 2FA
+
+### Abgeschlossene Issues
+- **#33 KI-Vernetzung:** `ki_update_schritte()` void→array, Haiku aktualisiert Beschreibung + Priorität automatisch bei neuer Aktivität. Flash zeigt KI-Änderungen.
+- **#35b-#35e E-Mail-Import:** IMAP-Cron (*/30), ki_functions.php extrahiert, email_queue.php UI, Crontab eingerichtet
+- **#36/#37 Telegram:** `telegram_notify()` in email_import.php — nur bei Dringend/Wichtig/Frist oder KI-Unsicherheit
+- **#38 Praxis-Alias-Filter:** INBOX mitscannen + Filter: `praxis.olszewski@posteo.de` ODER "soziotherapie" in Betreff/Absender → kein Claude-Call für private Mails
+- **#26 2FA:** TOTP aktiviert. Fix: `generateQrImageTag()` aus totp_setup.php entfernt (fehlende qrlib-Deps → HTTP 500). QR via JS.
+
+### Wichtige Fixes dieser Session
+- **Dedup-Bug:** KI-Fehler → `status='error'` → Dedup schließt error aus → nächster Run → UNIQUE-Fehler → Doppel-Import. Fix: Step 9 `INSERT OR IGNORE`, Step 10 UPSERT (`ON CONFLICT DO UPDATE`)
+- **claude_api_call:** Sonnet → Haiku (12× günstiger, reicht für E-Mail-Klassifizierung)
+- **IMAP-Konto:** Wechsel von `b.n@posteo.de` auf `bozena.olszewski@posteo.de` (App-PW: FA8Rvg8qXprtNQbJEcbV) — dort liegt der Praxis-Alias
+
+### E-Mail-Import Architektur (Stand v1.5)
+- **Konto:** bozena.olszewski@posteo.de (Posteo IMAP, Port 993)
+- **Cron:** `*/30 * * * * www-data php /var/www/vorgaenge/app/email_import.php`
+- **Filter-Reihenfolge:** Dedup → Praxis-Relevanz (Alias ODER soziotherapie) → Newsletter → Body-Extraktion → KI (Haiku) → Auto-Assign/Queue
+- **Telegram:** @Hetznit_bot, Chat-ID 6022997475, Token in .env
+- **Kosten:** Haiku statt Sonnet → ~Cent/Monat für 1-5 Mails/Tag
+
+### Vorgangs-Manager Stand v1.5
+- **2FA:** TOTP aktiv für User "ruben"
+- **Alle bekannten Issues geschlossen**
+- **Nächste Schritte:** Phase-III-Feedback aus Praxis-Betrieb abwarten
+
+## Letzte Session (2026-03-04) — Vorgangs-Manager #34 Eval-Set komplett
+- **batch_export.php deployed:** Verarbeitet PDFs aus /tmp/eval_batch/ → KI-Analyse → eval_NNN.json
+- **#34f abgeschlossen:** 27/30 PDFs aus Dropbox (Schriftverkehr/Öffentlich) verarbeitet, reviewed, verified:true
+  - 3 Scan-PDFs übersprungen (PARSE-FEHLER), 8 kernanliegen leer (Docs ohne verwertbaren Inhalt)
+  - Mapping: eval/doc_mapping.txt zeigt doc_NNN.pdf → Original-Dateiname
+- **Permission-Fix für batch_export.php:** --output /tmp/eval_output/ verwenden (bernd kein Schreibrecht auf /var/www/vorgaenge/eval/)
+- **Nächste Session:** #34b (Eval-Runner) + #34c (ki_feedback-Analyse) parallel starten
+
 ## Letzte Session (2026-03-02) — Vorgangs-Manager #30/#31 + #34 Eval-Set-Start
 - **#30/#31 deployed:** Beschreibungs-Feedback, Prioritäts-Feedback, KI-Prompt Regelwerk (Normal/Wichtig/Dringend + DRINGEND-Präfix für Schritte)
 - **#33 bewertet:** Intelligente Verbindung Aktivität↔Schritte↔Beschreibung = Nice-to-have, v2.0+, Klasse C
 - **#34 gestartet:** Eval-Set für KI-Kern-Kalibrierung — `konfidenz=hoch` ist selbst-deklariert, nie gegen echte Trefferquoten gemessen
 - **#34a + #34d deployed:** /eval/ Infrastruktur + ki_konfidenz-Spalte in ki_feedback
-- **#34 Nächstes:** #34b (Eval-Runner) + #34c (Feedback-Analyse) parallel; Ruben: #34f (25+ Ground-Truth-Docs nach eval/README.md)
 - **DB-Migrations-Muster:** Statische PDO-Variable → automatische Migration schlägt fehl → immer manuell: `sudo -u www-data sqlite3 /var/www/vorgaenge/data/vorgaenge.db 'ALTER TABLE ...'`
 
 ## Letzte Session (2026-03-01) — Vorgangs-Manager v1.0 abgeschlossen + Workflow-Test
