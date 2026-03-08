@@ -199,8 +199,8 @@ Bei Absturz ist so mindestens der letzte Issue-Stand gesichert.
 
 ### Memory-Commit
 ```bash
-cp /root/.claude/projects/-mnt-c-Users-Ruben/memory/MEMORY.md /root/claude-system/projects/-mnt-c-Users-Ruben/memory/MEMORY.md
-cd /root/claude-system && git add projects/-mnt-c-Users-Ruben/memory/MEMORY.md && git commit -m "memory: Session-Stand $(date +%Y-%m-%d)" && git push origin main
+cp /c/Users/Tim/.claude/projects/C--Users-Tim/memory/MEMORY.md /c/Users/Tim/.claude/projects/claude-system/projects/C--Users-Tim/memory/MEMORY.md
+cd /c/Users/Tim/.claude/projects/claude-system && git add projects/C--Users-Tim/memory/MEMORY.md && git commit -m "memory: Session-Stand $(date +%Y-%m-%d)" && git push origin main
 ```
 
 ---
