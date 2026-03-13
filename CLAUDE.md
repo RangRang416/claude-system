@@ -268,7 +268,8 @@ Bei Absturz ist so mindestens der letzte Issue-Stand gesichert.
 ### Memory-Commit
 ```bash
 cd /mnt/c/Users/Ruben/.claude
-git add -A && git commit -m "memory: Session-Stand $(date +%Y-%m-%d)" && git push origin main
+git add CLAUDE.md settings.json agents/ docs/ skills/ mindmaps/ .gitignore
+git commit -m "config: Session-Stand $(date +%Y-%m-%d)" && git push origin main
 ```
 
 ---
