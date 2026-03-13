@@ -1,3 +1,18 @@
 {
-  "model": "opus"
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "WebFetch",
+      "Bash(ls:*)"
+    ]
+  },
+  "logging": {
+    "level": "info"
+  },
+  "autoBackup": {
+    "enabled": true,
+    "intervalMinutes": 10,
+    "projectPath": "C:\\soziotherapie_demo",
+    "commitOnThematicChanges": true
+  }
 }

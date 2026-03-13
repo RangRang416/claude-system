@@ -1,41 +1,14 @@
-# === Alles ignorieren, dann gezielt whitelisten ===
-*
-
-# === Git selbst ===
-!.gitignore
-
-# === Dokumentation & Config ===
-!CLAUDE.md
-!settings.json
-!N8N-*.md
-!SECURITY-*.md
-!SERVER-*.md
-!STARTUP-README.md
-
-# === Agenten-Definitionen ===
-!agents/
-!agents/*.md
-
-# === Workflow-Docs & Templates ===
-!docs/
-!docs/*.md
-!docs/templates/
-!docs/templates/*.md
-
-# === Changelog & README ===
-!CHANGELOG.md
-!README.md
-
-# === Scripts ===
-!scripts/
-!scripts/*
-
-# === Auto-Memory (Session-übergreifend) ===
-!projects/
-!projects/-mnt-c-Users-Ruben/
-!projects/-mnt-c-Users-Ruben/memory/
-!projects/-mnt-c-Users-Ruben/memory/*
-
-# === Secrets IMMER ignorieren (überschreibt Whitelist) ===
-.credentials.json
-secrets/
+# Claude Code interne Ordner (automatisch generiert)
+plugins/
+session-env/
+shell-snapshots/
+statsig/
+telemetry/
+projects/
+todos/
+archive/
+backups/
+debug/
+settings.local.json
+*.log
+*.txt
