@@ -12,3 +12,4 @@ debug/
 settings.local.json
 *.log
 *.txt
+.credentials.json
