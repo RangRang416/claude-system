@@ -60,7 +60,42 @@ Typischer Ablauf eines Issues in Phase II:
 
 - **Kein Handover nötig** — Orchestrator behält den Kontext
 - **Wenn Test NICHT bestanden** → Implementer erneut spawnen (max 2x, dann Planner/Opus)
-- **Wenn Review CHANGES_REQUESTED** → Implementer erneut mit Befunden
+- **Wenn Review CHANGES_REQUESTED** → Review-Eskalationslogik anwenden (siehe "Review-Eskalation nach CHANGES_REQUESTED" weiter unten)
+
+## Review-Eskalation nach CHANGES_REQUESTED
+
+```
+Review: CHANGES_REQUESTED
+  → Orchestrator analysiert Reviewer-Befunde
+    │
+    ├─ Einfach (Typos, fehlende Validierung, Style-Fixes)
+    │   → Implementer erneut spawnen mit Befunden (max 2 Review-Runden)
+    │   → Nach 2. CHANGES_REQUESTED → Planner (Opus) = PFLICHT
+    │
+    ├─ Architektur-Bedenken (falsches Pattern, fehlende Abstraktion)
+    │   → Planner (Opus) spawnen = PFLICHT (kein erneuter Implementer-Versuch)
+    │   → Opus entscheidet: Refactor oder akzeptieren mit Tech-Debt-Issue
+    │
+    └─ Security-Befund
+        → Planner (Opus) spawnen = PFLICHT
+        → Kein Commit bis Opus freigibt
+
+Max 2 Review-Runden. Danach Opus, egal was.
+```
+
+### Review-Modell-Trennungsregel (PFLICHT)
+
+Implementer und Reviewer DÜRFEN NICHT dasselbe Modell sein.
+
+| Implementer | Reviewer | Erlaubt? |
+|-------------|----------|----------|
+| Haiku | Haiku | Nur bei Klasse A+ |
+| Sonnet | Haiku oder Opus | Ja — Haiku für Sanity, Opus für Logik |
+| Sonnet | Sonnet | **VERBOTEN** |
+| Opus | Sonnet | Ja |
+| Opus | Opus | **VERBOTEN** |
+
+**Warum:** Dasselbe Modell reproduziert eigene Denkmuster und übersieht eigene Fehler.
 
 ## Eskalationslogik
 

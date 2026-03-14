@@ -194,6 +194,23 @@ KEIN Reviewer bei:
 - Klasse A und A+ (zu trivial)
 - Reine CSS/Config/Doku
 
+### Review-Modell-Trennungsregel
+
+**Implementer und Reviewer DÜRFEN NICHT dasselbe Modell sein.**
+- Sonnet implementiert → Haiku (Sanity) oder Opus (Logik/Security) reviewed
+- Opus implementiert → Sonnet reviewed
+- Haiku implementiert → Haiku reviewed NUR bei Klasse A+
+
+**Review-Runden-Limit:** Max 2 CHANGES_REQUESTED, dann Planner (Opus).
+Details: @docs/eskalation.md → "Review-Eskalation nach CHANGES_REQUESTED"
+
+### Wer liefert Akzeptanzkriterien
+
+- **Phase I / neue Version:** Planner (Opus) — immer
+- **Klasse C Issues:** Planner (Opus) — immer
+- **Klasse A/A+/B aus bestehendem Plan:** Orchestrator — selbst definieren
+- **Bei Unsicherheit:** Planner spawnen
+
 ### Spawn-Breakeven
 Jeder Subagent-Spawn kostet ~18-20k Token Overhead (Claude Code Infrastruktur).
 
