@@ -204,6 +204,14 @@ KEIN Reviewer bei:
 **Review-Runden-Limit:** Max 2 CHANGES_REQUESTED, dann Planner (Opus).
 Details: @docs/eskalation.md → "Review-Eskalation nach CHANGES_REQUESTED"
 
+### Tester/Reviewer: Keine Trennungsregel
+
+Tester und Reviewer DÜRFEN dasselbe Modell sein. Die Implementer/Reviewer-Trennungsregel
+gilt NICHT für Tester/Reviewer, weil:
+- Tester führt Befehle aus und liest objektive Outputs (kein kreativer Akt)
+- Reviewer analysiert Code qualitativ (unabhängig vom Test)
+- Keine Contamination: verschiedene Arbeitsarten, kein gemeinsamer blinder Fleck
+
 ### Wer liefert Akzeptanzkriterien
 
 - **Phase I / neue Version:** Planner (Opus) — immer
