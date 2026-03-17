@@ -153,6 +153,27 @@ Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes 
 - Performance-Diagnose
 - Refactoring 3+ Dateien gleichzeitig
 
+### Orchestrator-Lösungsverbot (PFLICHT)
+
+Der Orchestrator darf **Probleme beschreiben**, aber **keine Lösungen vorschlagen**,
+die Code-Struktur, API-Design, DB-Schema, Tool-Aufteilung oder Modulstruktur betreffen.
+
+**Erlaubt:**
+- "Issue #21: Tools laden langsam (~10s). Vermutlich 2 sequenzielle Round-Trips."
+- "Empfehlung: Klasse C, Planner spawnen."
+- Akzeptanzkriterien für Klasse A/A+/B definieren (WAS geprüft wird)
+
+**Verboten:**
+- "Wir könnten read_profile und get_guidance zusammenführen."
+- "Lösung: Caching im MCP-Server einbauen."
+- "Ich schlage vor, die DB-Tabelle umzustrukturieren."
+
+**Warum:** Auch ein "Vorschlag" prägt die Entscheidung. Wenn Ruben zustimmt,
+wird der Planner zum Befehlsempfänger statt zum Architekten. Architektur ist Opus-Hoheit.
+
+**Ausnahme:** Klasse A/A+ Issues (trivial, 1-3 Dateien, kein neues Verhalten) —
+hier definiert der Orchestrator die Lösung direkt, weil kein Planner involviert ist.
+
 ### Implementer-Modellwahl
 
 | Änderungstyp | Beispiele | Modell |
