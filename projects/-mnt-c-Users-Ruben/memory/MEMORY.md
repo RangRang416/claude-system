@@ -1,5 +1,17 @@
 # Auto-Memory - Ruben's Workspace
 
+## Rubens Arbeitsweise (DAUERHAFT)
+
+**Bash-Commands / Implementierungen / Deployments:** Ohne Rückfrage durchführen. Ruben will keinen Bestätigungsdialog für einzelne Tool-Calls.
+
+**Rückfragen NUR bei:**
+- Architekturentscheidungen (neue DB-Tabellen, Tech-Stack-Änderungen)
+- Blockern (fehlende Credentials, unklare Anforderungen)
+- Strategischen Weichenstellungen (Versionierung, Issue-Priorisierung)
+- Push zu Remote (einmalige Bestätigung pro Session reicht)
+
+---
+
 ## PFLICHT-WORKFLOW - JEDE SESSION (NICHT OPTIONAL)
 
 **Diese Schritte werden UNAUFGEFORDERT ausgeführt. Ruben muss NICHT daran erinnern.**
@@ -68,136 +80,43 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
 
-## Letzte Session (2026-03-08) — Vorgangs-Manager v1.5 — E-Mail-Import + 2FA
+## Letzte Session (2026-03-17) — claude-soul v2.2/v2.3 + Workflow-Updates
 
-### Abgeschlossene Issues
-- **#33 KI-Vernetzung:** `ki_update_schritte()` void→array, Haiku aktualisiert Beschreibung + Priorität automatisch bei neuer Aktivität. Flash zeigt KI-Änderungen.
-- **#35b-#35e E-Mail-Import:** IMAP-Cron (*/30), ki_functions.php extrahiert, email_queue.php UI, Crontab eingerichtet
-- **#36/#37 Telegram:** `telegram_notify()` in email_import.php — nur bei Dringend/Wichtig/Frist oder KI-Unsicherheit
-- **#38 Praxis-Alias-Filter:** INBOX mitscannen + Filter: `praxis.olszewski@posteo.de` ODER "soziotherapie" in Betreff/Absender → kein Claude-Call für private Mails
-- **#26 2FA:** TOTP aktiviert. Fix: `generateQrImageTag()` aus totp_setup.php entfernt (fehlende qrlib-Deps → HTTP 500). QR via JS.
+### claude-soul: 6 Issues abgeschlossen + deployed
+- **#22/#23:** System-Prompt neu strukturiert, 5 neue Regeln (rules.json), has_entries Rule-Typ, current_time in get_guidance, memory_layers-Doku
+- **#21:** start_session ersetzt read_profile + get_guidance (1 statt 2 Round-Trips)
+- **#24:** MIN_MESSAGES_BEFORE_PROPOSAL 4→2 (may_propose früher true)
+- **Bugfix:** markdown-generator.js `p.id` → `p.proposal_id` (Proposal-IDs waren "?")
+- **profile.md** manuell regeneriert nach markdown-generator-Fix
+- **Lokale Kopie veraltet:** `/mnt/c/Users/Ruben/claude-migration/projektdoku/PROJEKT_HETZNER_CLAUDE/mcp-soul/` ist NICHT aktuell — immer `/tmp/claude-soul-work` (frischer Clone) oder direkt GitHub als Basis nutzen
+- **System-Prompt Claude Desktop:** `start_session` statt read_profile + get_guidance
 
-### Wichtige Fixes dieser Session
-- **Dedup-Bug:** KI-Fehler → `status='error'` → Dedup schließt error aus → nächster Run → UNIQUE-Fehler → Doppel-Import. Fix: Step 9 `INSERT OR IGNORE`, Step 10 UPSERT (`ON CONFLICT DO UPDATE`)
-- **claude_api_call:** Sonnet → Haiku (12× günstiger, reicht für E-Mail-Klassifizierung)
-- **IMAP-Konto:** Wechsel von `b.n@posteo.de` auf `bozena.olszewski@posteo.de` (App-PW: FA8Rvg8qXprtNQbJEcbV) — dort liegt der Praxis-Alias
+### claude-system: 3 Workflow-Lücken geschlossen (#8, #9, #10)
+- **#8:** Tester/Reviewer dürfen dasselbe Modell sein (Klarstellung)
+- **#9:** Orchestrator-Lösungsverbot — darf Probleme beschreiben, keine Architektur-Lösungen vorschlagen (Ausnahme: Klasse A/A+)
+- **#10 (offen):** Workflow-Lücke: kein Integrations-Test nach Deploy
 
-### E-Mail-Import Architektur (Stand v1.5)
-- **Konto 1:** b.n@posteo.de — Praxis-Hauptkonto, nur Unterordner (Burdenski etc.), kein Filter (alle Mails)
-- **Konto 2:** bozena.olszewski@posteo.de — Privatkonto Frau, INBOX+Unterordner, Filter: praxis.olszewski@posteo.de ODER soziotherapie
-- **Cron:** `*/30 * * * * www-data php /var/www/vorgaenge/app/email_import.php`
-- **Filter-Reihenfolge:** Dedup → Praxis-Relevanz (per Konto) → Newsletter → Body-Extraktion → KI (Haiku) → Auto-Assign/Queue
-- **Telegram:** @Hetznit_bot, Chat-ID 6022997475, Token in .env
-- **Kosten:** Haiku statt Sonnet → ~Cent/Monat für 1-5 Mails/Tag
-- **API-Limit:** Anthropic-Guthaben aufgebraucht, Reset 2026-04-01
+### Offene Issues (nächste Session)
+- claude-system #10: Integrations-Test nach Deploy (Planner nötig)
+- claude-system #7: Überprüfung Arbeitsprozess Claude-Coder
 
-### Vorgangs-Manager Stand v1.5
-- **2FA:** TOTP aktiv für User "ruben"
-- **Alle bekannten Issues geschlossen**
-- **Nächste Schritte:** Phase-III-Feedback aus Praxis-Betrieb abwarten
+### Lessons Learned
+- Lokale mcp-soul Dateien sind veraltet → immer frischen Clone verwenden
+- Cross-component Bugs (Feldnamen-Mismatch zwischen Dateien) fallen erst in Phase III auf
+- tool_search 2× bei Session-Start: WONTFIX (MCP-Client-Verhalten, nicht server-seitig lösbar)
 
-## Letzte Session (2026-03-04) — Vorgangs-Manager #34 Eval-Set komplett
-- **batch_export.php deployed:** Verarbeitet PDFs aus /tmp/eval_batch/ → KI-Analyse → eval_NNN.json
-- **#34f abgeschlossen:** 27/30 PDFs aus Dropbox (Schriftverkehr/Öffentlich) verarbeitet, reviewed, verified:true
-  - 3 Scan-PDFs übersprungen (PARSE-FEHLER), 8 kernanliegen leer (Docs ohne verwertbaren Inhalt)
-  - Mapping: eval/doc_mapping.txt zeigt doc_NNN.pdf → Original-Dateiname
-- **Permission-Fix für batch_export.php:** --output /tmp/eval_output/ verwenden (bernd kein Schreibrecht auf /var/www/vorgaenge/eval/)
-- **Nächste Session:** #34b (Eval-Runner) + #34c (ki_feedback-Analyse) parallel starten
+## Letzte Session (2026-03-11) — claude-soul V2 dynamische Soul
+- **6 Sub-Issues implementiert + deployed** (#7 → #8-#13), alle Tests bestanden
+- **Neue Tools:** propose_update, confirm_proposal, soul-criteria.json, session-tracker.js
+- **Commits:** 7 Commits auf RangRang416/claude-soul main
 
-## Letzte Session (2026-03-02) — Vorgangs-Manager #30/#31 + #34 Eval-Set-Start
-- **#30/#31 deployed:** Beschreibungs-Feedback, Prioritäts-Feedback, KI-Prompt Regelwerk (Normal/Wichtig/Dringend + DRINGEND-Präfix für Schritte)
-- **#33 bewertet:** Intelligente Verbindung Aktivität↔Schritte↔Beschreibung = Nice-to-have, v2.0+, Klasse C
-- **#34 gestartet:** Eval-Set für KI-Kern-Kalibrierung — `konfidenz=hoch` ist selbst-deklariert, nie gegen echte Trefferquoten gemessen
-- **#34a + #34d deployed:** /eval/ Infrastruktur + ki_konfidenz-Spalte in ki_feedback
-- **DB-Migrations-Muster:** Statische PDO-Variable → automatische Migration schlägt fehl → immer manuell: `sudo -u www-data sqlite3 /var/www/vorgaenge/data/vorgaenge.db 'ALTER TABLE ...'`
-
-## Letzte Session (2026-03-01) — Vorgangs-Manager v1.0 abgeschlossen + Workflow-Test
-- **Workflow-Test erfolgreich:** Neues A/B/C-System am echten Projekt validiert
-- **Session-Start:** Orchestrator las handover.md + projekt.md direkt (kein Scout) — funktioniert
-- **Phase III Evaluation:** Opus erkannte 2 Bugs (Auto-Zuordnung + Import-Confirm Feedback)
-- **Bugfixes:** Klasse B → Implementer (Sonnet) + Tester (Sonnet) — kein Reviewer nötig
-- **CHANGELOG:** Orchestrator direkt geschrieben — kein Documenter-Spawn
-- **v1.0 released:** Git-Tag gesetzt, MEMORY_v1.0.md archiviert
-- **Vorgangs-Manager Repo:** github.com/RangRang416/vorgangs-manager, Branch: master
-
-## Letzte Session (2026-02-28) — Workflow-Kalibrierung: Klassen A/B/C + Documenter abgeschafft
-- **Drei-Klassen-System eingeführt:** A (Trivial/0 Spawns), B (Standard/2 Spawns), C (Komplex/volle Pipeline)
-- **Documenter-Agent entfernt:** CHANGELOG schreibt Orchestrator direkt (Spawn-Overhead 3× teurer als Direktschreiben)
-- **Reviewer:** nur noch bei Klasse C und nur bei Security/DB/KI
-- **Token-Realität:** Spawn-Overhead ~15k Input-Tokens — unabhängig vom Modell, nicht kontrollierbar
-- **Breakeven:** Subagent lohnt erst ab ~15k Token eigener Arbeit; Scout (500 Token Arbeit) und Documenter (2k) lagen weit darunter
-- **Agenten verbleibend:** Planner (Opus), Implementer (Sonnet), Tester (dynamisch), Reviewer (dynamisch), Deployer (Sonnet)
-- Commits `bd6a122` + `7c3f4ec` gepusht zu claude-system
-
-## Letzte Session (2026-02-28) — Scout-Agent entfernt
-- **Erkenntnis:** Jeder Subagent-Spawn kostet ~18-20k Token System-Overhead (Claude Code Basis-Infrastruktur) — nicht kontrollierbar
-- **Scout abgeschafft:** Orchestrator liest handover.md + projekt.md direkt (~500 Token statt ~20k)
-- **Documenter-Scope** klargestellt: Nur CHANGELOG.md + backlog.md. Negativliste in CLAUDE.md verankert.
-- **Neue Checkliste** in projekt-start.md: "Bestehendes Projekt übernehmen" (8 Schritte, kein Scout)
-- **Workflow-Erkenntnis:** Orchestrator macht Status-Check selbst — kein Subagent für triviale Reads
-- **Token-Budget-Realität:** "< 2k" war nie als Gesamt-Budget erreichbar — System-Overhead allein ~18-20k
-- Commit `fd0a47e` + `452fe58` gepusht zu claude-system
-
-## Letzte Session (2026-02-27) — Agent-Definitionen konform mit CLAUDE.md
-- **Planner-Analyse:** Alle 7 Agenten systematisch gegen CLAUDE.md geprüft
-- **Scout (#3):** Komplett neu — Zwei-Modi, Token-Budgets, JSON-Output, RETRIEVAL-Grundregel
-- **Planner (#4):** Widerspruch Glob/Grep entfernt, JSON-Rückgabe, Kein-Prosa
-- **Alle 5 restlichen Agenten (#5):** JSON-Rückgabe + Kein-Prosa überall; Deployer: PFLICHT-Freigabe
-- **Erkenntnis:** Agenten lesen CLAUDE.md nicht — Constraints müssen direkt im Agent-Prompt stehen
-- **Workflow bewährt:** Planner → Implementer → Tester → Reviewer → Commit (korrekt durchgehalten)
-- **Documenter:** Token-Cap jetzt im Prompt verankert (war nur in CLAUDE.md)
-
-## Letzte Session (2026-02-26) — Konsolidierung zu claude-system
-- **Neues Repo:** `claude-system` (https://github.com/RangRang416/claude-system)
-- **Struktur:** CLAUDE.md (agentic workflow), agents/ (7), docs/ (4 Docs + 8 Templates)
-- **CLAUDE.md:** Jetzt die agentic workflow Regeln direkt, `@docs/` Referenzen lösen gegen `/root/.claude/docs/` auf
-- **Remote-URL** von `claude-root-config` auf `claude-system` umgestellt
-- **Archiviert:** claude-root-config, Claude-Projekte, agentic-workflow Repos
-- **Wichtig:** Die alte `/root/.claude/CLAUDE.md` (Wrapper mit memory-imports) ist ersetzt — Profil-Info kommt jetzt aus dieser MEMORY.md
-
-## Letzte Session (2026-02-25) — Token-Effizienz + Workflow-Architektur
-- **Token-Effizienz-Overhaul:**
-  - Scout: Zwei-Modi (Status-Check <2k / Datei-Erkundung <8k), JSON-Output, kein Repo-Scan
-  - handover.md → Pointer-Index (~200 Token, ~10 Zeilen, keine Prosa)
-  - JSON-Payloads für alle Subagenten (keine Prosa-Berichte)
-  - Tool-Restriktionen: Scout kein Glob/WebSearch, Planner nur benannte Dateien, Documenter Cap 1.500
-  - Archivierungs-Logik: projekt.md/backlog.md > 200 Zeilen → archive_YYYY-MM.md
-- **Session-Start-Ablauf neu definiert:**
-  1. Orchestrator: `gh issue list` (selbst, 1 Befehl)
-  2. Scout (Haiku): handover.md lesen → JSON
-  3. Orchestrator: kombiniert beides → erkennt neue Issues
-  4. Neue Issues → Empfehlung an Ruben → Ruben entscheidet → IMMER Planner (Opus)
-  5. Ruben informieren → Loslegen
-- **Phase-III-Rückfluss:** Ruben erstellt GitHub Issues beim Praxistest → nächste Session: Orchestrator gibt Empfehlung (Kernfunktion/Nice-to-have), Ruben entscheidet, Planner ordnet ein
-- **Neue Regel:** Orchestrator ordnet KEINE neuen Issues selbst ein — immer Planner
-- **Absturz-Sicherheit:** handover.md wird nach JEDEM Issue aktualisiert, nicht nur am Session-Ende
-- **6 Commits, 2 Repos gepusht** (claude-root-config bis `2f44a00`, agentic-workflow `d69d6b0`)
-
-## Agentic Workflow Evolution (Zusammenfassung 2026-02-22 bis 2026-02-25)
-- **v0.1 (02-22):** 6 Templates, PoC erfolgreich, ~39% Token-Ersparnis gemessen
-- **v0.2 (02-23):** Native Agenten (.claude/agents/), Progressive Disclosure, Scout als 7. Agent
-- **v0.3 (02-25):** Token-Effizienz, Phase-III-Rückfluss, Planner-Pflicht, Absturz-Sicherheit
-
-## Vorgangs-Manager (Zusammenfassung bis 2026-02-20)
-- **LIVE:** https://praxis-olszewski.de/vorgaenge
-- **KI-Kern:** Auto-Zuordnung, Lernfähigkeit (ki_feedback), konfidenz hoch/niedrig
-- **Phase I v1.0 abgeschlossen:** Issues #17-#19 geplant (DB-Migration, UI, KI-Prompt)
-- **Bekannte Issues:** Apache LANG=C → ASCII-sichere Pfade, SQLite WAL-Rechte nach SSH-Zugriff
-
-## Vorgangs-Manager Architektur (KI-Flow)
-```
-Upload/Text → detect_kontrahenten_in_text() → Claude Haiku API
-  → Prompt: VOR-ERKENNUNG + LERNEFFEKTE + VORGÄNGE + BEKANNTE Werte
-  → konfidenz=hoch → Auto-Zuordnung | konfidenz=niedrig → Confirm-Seite
-  → Korrektur? → ki_feedback
-```
-
-## Ältere Sessions (vor 2026-02-22)
-→ Details archiviert. Siehe Git-History der jeweiligen Repos.
-- 02-19: Issues #15/#16, KI-Prompt-Optimierung, Git-Setup für .claude
-- 02-18: Issue #14 Bugfix (LANG=C + ASCII-Pfade)
-- 02-16: Issue #4 komplett (Vorgang-Erkennung, Mixed-PDF, Schritte-Tracking)
-- 02-15: KI-Kern live, Auto-Zuordnung, UI-Polishing
-- 02-14: Thema, Querverbindungen, Duplikat-Erkennung, Deployment-Fix
-- 02-12: Vorgangs-Manager Phase 1 komplett, LIVE deployed
-- 02-07: Server Security-Updates, Docker 29.2.1, Pre-Update-Backup
+## Ältere Sessions
+→ Archiviert. Siehe Git-History der jeweiligen Repos.
+- 2026-03-10: claude-soul V1.0 abgeschlossen (6/6 Issues, MCP-Server, Telegram, Autostart)
+- 2026-03-08: Vorgangs-Manager v1.5 (E-Mail-Import, 2FA, Dedup-Bug, Haiku statt Sonnet)
+- 2026-03-04: Vorgangs-Manager #34 Eval-Set komplett (27/30 PDFs)
+- 2026-03-01: Vorgangs-Manager v1.0 released, Workflow A/B/C validiert
+- 2026-02-28: Documenter abgeschafft, Scout entfernt, Klassen A/B/C eingeführt
+- 2026-02-26: Konsolidierung → claude-system Repo
+- 2026-02-22–25: Agentic Workflow v0.1–v0.3 (Templates, Native Agenten, Token-Effizienz)
+- vor 2026-02-22: Vorgangs-Manager Aufbau, KI-Kern, LIVE-Deployment
