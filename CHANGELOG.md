@@ -1,5 +1,11 @@
 # CHANGELOG - claude-system
 
+## [2026-03-21] — #11 Spawn-Breakeven als Pflichtschritt eingebaut
+
+### Geändert
+- `CLAUDE.md` (Vollversion): Expliziter 3-Zeilen-Block im Spawn-Breakeven-Abschnitt — "VOR jedem Tester/Reviewer-Spawn prüfen" mit Override-Logik
+- `CLAUDE.md` (Kompaktversion): Spawn-Breakeven-Kurzregel in Abschnitt 3 eingefügt
+
 ## [2026-02-28] — Scout-Agent entfernt
 
 ### Entfernt
