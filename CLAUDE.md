@@ -75,12 +75,20 @@ Bei neuem Projekt:
 - ✅ Commit mit Issue-Referenz
 - ✅ CHANGELOG.md aktualisiert
 - ✅ Ruben informiert: "Issue #X abgeschlossen, Test: [was], Ergebnis: [was]"
+- ✅ Smoke-Test nach Deploy (bei Klasse B/C, Deployer führt aus — siehe Smoke-Test-Regel)
 
 **Test-vor-Commit-Regel (PFLICHT):**
 - Vor JEDEM Commit testen — bei reinen Doku-Commits EXPLIZIT begründen warum kein Test
 - Test = Tester-Subagent (automatisch, Phase II) — KEIN Ruben-Browsertest in Phase II
 - Ruben-Browsertest gehört in Phase III (nach Deployment, fachliche Prüfung)
 - Push zu Remote ERST nach bestandenem Test + Ruben-Freigabe
+
+**Smoke-Test-nach-Deploy-Regel (PFLICHT bei B/C, optional bei A/A+):**
+- Deployer (Sonnet) führt nach Deploy 1-3 Befehle aus, die echte Funktionalität prüfen
+- Kein Subagent-Spawn (< 5k Token, Deployer hat Kontext) — Breakeven-Prinzip gilt
+- Typische Smoke-Tests: `curl` (Web/API), `node -e "require(...)"` (MCP/JS), `php -r` (PHP), SQL-Query (DB)
+- Planner definiert pro Projekt einen `smoke_test:`-Block in projekt.md (konkrete Befehle + Host/URL)
+- Fehlgeschlagener Smoke-Test → `git revert` + Ruben informieren (wie Rollback-Regel)
 
 ---
 
@@ -117,9 +125,10 @@ Kein manueller Modellwechsel. Keine handover.md innerhalb einer Session.
 | Implementer | dynamisch* | **ja** | - | - | - | - | - | ja |
 | Tester | dynamisch | - | - | - | **ja** | - | - | ja |
 | Reviewer | dynamisch | - | - | - | - | - | - | ja |
-| Deployer | Sonnet | - | - | - | - | **ja**¹ | - | ja |
+| Deployer | Sonnet | - | - | - | **smoke**² | **ja**¹ | - | ja |
 
 ¹ = Nur nach Rubens Freigabe · *oder wie vom Planner zugewiesen
+² = Nur Smoke-Tests nach Deploy (1-3 Befehle, kein Subagent-Spawn)
 
 **Tool-Restriktionen:**
 - **Scout:** Keine rekursiven Scans (`ls -R`, Glob `**/*`). Nur gezielte Read-Aufrufe auf benannte Dateien.
