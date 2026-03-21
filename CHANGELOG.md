@@ -1,5 +1,13 @@
 # CHANGELOG - claude-system
 
+## [2026-03-21] — #10 Smoke-Test nach Deploy eingeführt + #11 Spawn-Breakeven
+
+### Hinzugefügt (#10)
+- `CLAUDE.md`: Smoke-Test-nach-Deploy-Regel (PFLICHT bei B/C, optional A/A+)
+- Definition of Done: 5. Punkt "Smoke-Test nach Deploy" ergänzt
+- Deployer-Rechte-Matrix: `smoke²`-Spalte hinzugefügt
+- Planner-Pflicht: `smoke_test:`-Block in projekt.md pro Projekt
+
 ## [2026-03-21] — #11 Spawn-Breakeven als Pflichtschritt eingebaut
 
 ### Geändert
