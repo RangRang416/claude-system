@@ -243,6 +243,11 @@ gilt NICHT für Tester/Reviewer, weil:
 ### Spawn-Breakeven
 Jeder Subagent-Spawn kostet ~18-20k Token Overhead (Claude Code Infrastruktur).
 
+**VOR jedem Tester/Reviewer-Spawn prüfen (PFLICHT):**
+→ Dateien bereits im Kontext? UND Test-Arbeit < 5k Token?
+→ Wenn beides JA: Orchestrator prüft direkt — kein Spawn.
+→ Pipeline-Klasse (z.B. "B → Tester") ist der Normalfall, Breakeven ist der Override.
+
 **Spawn lohnt sich nur wenn:**
 - Erwartete Arbeit > 20k Token ODER
 - Spezialisierung kritisch (z.B. Opus für Security)
