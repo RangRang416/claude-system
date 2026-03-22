@@ -9,7 +9,7 @@ CONTAINER_NAME="n8n-email-analyzer"
 IMAGE_NAME="n8nio/n8n:latest"
 BACKUP_DIR="/var/backups/n8n"
 LOG_FILE="/var/log/n8n-auto-update.log"
-TELEGRAM_BOT_TOKEN="8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw"
+TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}"
 TELEGRAM_CHAT_ID="6022997475"
 
 # Logging

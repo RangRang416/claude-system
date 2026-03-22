@@ -293,7 +293,7 @@ sudo ls -la /var/lib/n8n-monitor/
 
 ### Konfiguration
 - **Bot:** @Hetznit_bot
-- **Token:** 8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw
+- **Token:** ${TELEGRAM_BOT_TOKEN}
 - **Chat-ID:** 6022997475
 
 ### Alert-Typen
@@ -312,7 +312,7 @@ sudo ls -la /var/lib/n8n-monitor/
 
 ### Test-Nachricht senden
 ```bash
-curl -s -X POST "https://api.telegram.org/bot8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw/sendMessage" \
+curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
   -d "chat_id=6022997475" \
   -d "text=🧪 *Test-Alert*%0A%0ADies ist eine Test-Nachricht." \
   -d "parse_mode=Markdown"
@@ -370,12 +370,12 @@ sudo ls -la /var/lib/n8n-monitor/alert_*
 **Diagnose:**
 ```bash
 # Test-Nachricht senden
-curl -s -X POST "https://api.telegram.org/bot8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw/sendMessage" \
+curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
   -d "chat_id=6022997475" \
   -d "text=Test"
 
 # Bot-Info prüfen
-curl -s "https://api.telegram.org/bot8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw/getMe"
+curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe"
 ```
 
 **Lösungen:**

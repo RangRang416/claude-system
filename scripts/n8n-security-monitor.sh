@@ -7,7 +7,7 @@ set -euo pipefail
 # Konfiguration
 CONTAINER_NAME="n8n-email-analyzer"
 LOG_FILE="/var/log/n8n-security-monitor.log"
-TELEGRAM_BOT_TOKEN="8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw"
+TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}"
 TELEGRAM_CHAT_ID="6022997475"
 STATE_DIR="/var/lib/n8n-monitor"
 ALERT_COOLDOWN=3600  # Sekunden zwischen gleichen Alerts

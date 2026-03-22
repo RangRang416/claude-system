@@ -14,7 +14,7 @@
 // ===== KONFIGURATION =====
 $CONFIG = [
     'telegram' => [
-        'bot_token' => '8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw',
+        'bot_token' => '${TELEGRAM_BOT_TOKEN}',
         'chat_id' => '6022997475'
     ],
 

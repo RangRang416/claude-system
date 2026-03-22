@@ -83,7 +83,7 @@ Host hetzner
 
 ### 5. Telegram Monitoring
 - **Bot:** @Hetznit_bot
-- **Token:** `8218652700:AAFyez3gfj_z3GaLdxNN141159RD98wjUgw`
+- **Token:** `${TELEGRAM_BOT_TOKEN}`
 - **Chat ID:** `6022997475`
 - **Checks:** Security, System, Backup, Web-App, SSL, Updates
 - **Auto-Updates:** ✅ Ubuntu-Pakete (automatisch), ⚠️ Docker/Node.js (manuell)
