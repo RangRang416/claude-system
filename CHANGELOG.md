@@ -1,5 +1,13 @@
 # CHANGELOG - claude-system
 
+## [2026-03-25] — Planner-Spawn Workflow erweitert (#16/#17/#18/#36)
+
+### Geändert
+- `CLAUDE.md`: Vor Planner-Spawn Pflichtschritte: `gh issue view` (vollständige Issues + Kommentare) + `projekt.md` lesen
+- `CLAUDE.md`: Review-Loop nach Planner-Spawn mit explizitem Freigabe-Schritt (KEINE Zusammenfassung)
+- `CLAUDE.md`: Planner-Output why:-Pflichtfeld dokumentiert
+- `docs/templates/planner.md`: why:-Pflichtfeld in Liefere-Abschnitt + Output-Format erweitert
+
 ## [2026-03-21] — #10 Smoke-Test nach Deploy eingeführt + #11 Spawn-Breakeven
 
 ### Hinzugefügt (#10)
