@@ -34,6 +34,16 @@ Sonnet ist der **Orchestrator**. Beim Start:
    - Der Orchestrator ordnet KEINE neuen Issues selbst ein — das ist Planner-Aufgabe
    - Bereits geplante Issues (in projekt.md mit Akzeptanzkriterien) → Orchestrator arbeitet direkt ab
 
+**Vor Planner-Spawn (PFLICHT, #16/#36):**
+- `gh issue view <NR>` ausführen (vollständige Issue-Beschreibung lesen)
+- `projekt.md` lesen (Architektur, bestehende Entscheidungen, Phase-Kontext)
+- Beides als Kontext in den Planner-Prompt aufnehmen — kein Planner-Spawn ohne diese Schritte
+
+**Review-Loop nach Planner-Spawn (PFLICHT, #18):**
+- Orchestrator prüft Planner-Output gegen die Issue-Anforderungen
+- Vollständiger Plan (alle Issues mit Akzeptanzkriterien) → Freigabe durch Ruben einholen
+- Erst nach Freigabe mit Implementierung beginnen
+
 5. **Ruben informieren:** "Letzter Stand: [X]. Nächstes: #Y. [Neue Issues: #A, #B — Empfehlung: ...]"
 
 6. Loslegen
@@ -161,6 +171,16 @@ Subagenten (Haiku/Opus) kommunizieren mit dem Orchestrator über strukturiertes 
 - DB-Schema mit Migration
 - Performance-Diagnose
 - Refactoring 3+ Dateien gleichzeitig
+
+### Planner-Output: why:-Pflichtfeld (#17)
+
+Jede nicht-triviale Planner-Entscheidung braucht ein `why:`-Feld:
+- Issue-Klasse (A/B/C) → `why:` (Kriterien, die zur Einstufung führten)
+- Modellwahl (Opus/Sonnet/Haiku) → `why:` (warum dieses Modell)
+- Reihenfolge / Abhängigkeiten → `why:` (warum diese Reihenfolge)
+- Bibliotheks- oder Architektur-Entscheidung → `why:` (Alternativen + Wahl)
+
+Ohne `why:` darf keine Entscheidung stehen. Triviale Aussagen (z.B. "CHANGELOG aktualisieren") brauchen kein `why:`.
 
 ### Orchestrator-Lösungsverbot (PFLICHT)
 

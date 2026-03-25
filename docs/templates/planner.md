@@ -29,15 +29,26 @@ Repo: {{REPO_PATH}}
 1. Issues (4 Pflichtbestandteile: Was geprüft / Wie getestet / Ergebnis / Modell)
 2. Architekturentscheidungen (falls nötig)
 3. Risiken
+4. **why:-Pflichtfeld** für jede nicht-triviale Entscheidung: Klasse, Modell, Reihenfolge, Bibliothekswahl, Architektur-Ansatz. Ohne `why:` darf keine Entscheidung stehen.
 
 Regeln: Kein Code. Kein Git. Kein Glob. Nur benannte Dateien lesen.
 
 ARCHITEKTUR-ENTSCHEIDUNGEN:
 - [Entscheidung]: [Begründung]
+  why: [Herleitung — welche Alternativen wurden erwogen, warum diese gewählt]
 
 ISSUES:
 ### Issue: [Titel]
 - Beschreibung: [Was]
+- Klasse: [A/A+/B/C]
+  why: [Begründung]
+- Modell: [Opus/Sonnet/Haiku]
+  why: [Begründung]
+- Reihenfolge: [n] — Abhängigkeiten: [keine / #X vor #Y]
+  why: [Begründung]
+- Inhaltliche Entscheidungen (falls vorhanden):
+  - [Bibliothek X statt Y / Ansatz A statt B]
+    why: [Begründung — Alternativen, Kriterien, Entscheidung]
 - Akzeptanzkriterien: Was geprüft / Wie getestet / Ergebnis / Modell
 - Blockiert durch: [Issue oder "keine"]
 
