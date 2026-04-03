@@ -1,5 +1,8 @@
 # Auto-Memory - Ruben's Workspace
 
+## Feedback / Korrekturen
+- [feedback_spawn_breakeven.md](feedback_spawn_breakeven.md) — Spawn-Breakeven VOR jedem Tester-Spawn prüfen, nicht Pipeline mechanisch anwenden
+
 ## Rubens Arbeitsweise (DAUERHAFT)
 
 **Bash-Commands / Implementierungen / Deployments:** Ohne Rückfrage durchführen. Ruben will keinen Bestätigungsdialog für einzelne Tool-Calls.
@@ -68,6 +71,7 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
 4. **WoW Quest Optimizer** - Aktiv
 5. **Nike Laufen** - LIVE
 6. **Agentic Workflow** - v1.0 PoC ERFOLGREICH (https://github.com/RangRang416/agentic-workflow)
+7. **claude-soul** - LIVE (Hetzner MCP-Server) — v2.8, Qdrant Memory-Kontinuität
 
 ## Bekannte Probleme / Hinweise
 - Windows-Zeilenumbrüche (CR/LF) bei SCP-Uploads → `sed -i 's/\r//' datei` nötig
@@ -79,39 +83,69 @@ angesprochen. Es ist wie die Einkaufstasche - selbstverständlich mitzunehmen.
 - **Apache läuft mit LANG=C (POSIX)!** → UTF-8 in Shell-Befehlen oder Dateipfaden NICHT verwenden!
   → Alle Pfade für shell_exec/qpdf/system-Calls müssen ASCII-sicher sein
   → Bug: qpdf schrieb Datei ohne ä/ö/ü, PHP's file_exists() suchte MIT → nie gefunden
+- **Lokale claude-soul Kopie veraltet:** `/mnt/c/Users/Ruben/claude-soul/` kann veraltet sein → immer frischen Clone oder GitHub als Basis nutzen
+- **Telegram Bot Token:** War öffentlich (Secret Scanning Alert #1), revoked + bereinigt (2026-03-22)
 
-## Letzte Session (2026-03-17) — claude-soul v2.2/v2.3 + Workflow-Updates
+## Letzte Session (2026-04-03) — claude-system #22/#21 + Issues #19-#29
 
-### claude-soul: 6 Issues abgeschlossen + deployed
-- **#22/#23:** System-Prompt neu strukturiert, 5 neue Regeln (rules.json), has_entries Rule-Typ, current_time in get_guidance, memory_layers-Doku
-- **#21:** start_session ersetzt read_profile + get_guidance (1 statt 2 Round-Trips)
-- **#24:** MIN_MESSAGES_BEFORE_PROPOSAL 4→2 (may_propose früher true)
-- **Bugfix:** markdown-generator.js `p.id` → `p.proposal_id` (Proposal-IDs waren "?")
-- **profile.md** manuell regeneriert nach markdown-generator-Fix
-- **Lokale Kopie veraltet:** `/mnt/c/Users/Ruben/claude-migration/projektdoku/PROJEKT_HETZNER_CLAUDE/mcp-soul/` ist NICHT aktuell — immer `/tmp/claude-soul-work` (frischer Clone) oder direkt GitHub als Basis nutzen
-- **System-Prompt Claude Desktop:** `start_session` statt read_profile + get_guidance
+### claude-system: Regelwerk-Konsolidierung (Batch "Regelqualität")
+- **#22:** MUSS/MUSS NICHT/SOLL/KANN-Schema in CLAUDE.md (Voll+Kompakt) — 15 MUSS, 6 MUSS NICHT, 13 SOLL. Planner definierte Schema (4 Stufen, max 15 MUSS, Anti-Inflation). Scout-Spawn → SOLL.
+- **#21:** critic.md erstellt — Opus, unabhängig, kalt starten (DARF NICHT Planner-Kontext erhalten). Planner+Critic Bootstrap-Review durchgeführt (CHANGES_REQUESTED → gefixt).
+- **projekt.md** für claude-system erstellt (war nicht vorhanden).
+- **Kritische Fixes:** MUSS NICHT ≠ DARF NICHT (Unabhängigkeitsprinzip), Glob verboten für Critic, Klasse-C-Pipeline ergänzt um Critic⁴.
+- **Commit steht aus** — alle Änderungen staged, nächste Session committen + pushen.
+- **Offene Issues:** #19, #20, #23, #24, #25, #26, #27, #29 — Reihenfolge: #20→#23→#19→#24→#29→#25→#26→#27
 
-### claude-system: 3 Workflow-Lücken geschlossen (#8, #9, #10)
-- **#8:** Tester/Reviewer dürfen dasselbe Modell sein (Klarstellung)
-- **#9:** Orchestrator-Lösungsverbot — darf Probleme beschreiben, keine Architektur-Lösungen vorschlagen (Ausnahme: Klasse A/A+)
-- **#10 (offen):** Workflow-Lücke: kein Integrations-Test nach Deploy
+### Neue Issues (2026-04-03)
+- #20: Session-Start Orchestrator liest handover.md selbst
+- #21: Critic-Agent (implementiert, Bootstrap-Review done)
+- #22: MUSS/SOLL/KANN-Schema (implementiert, uncommitted)
+- #23: Issue-Kommentare --comments Pflicht
+- #24: Planner Effort-Level → SOLL max effort
+- #25: Critic MUSS vor Review/Commit bei Architektur existieren
+- #26: Orchestrator prüft Planner-Wirtschaftlichkeit bei mehreren Issues
+- #27: Orchestrator MUSS Issues token-effizient eintragen/delegieren
+- #28: Bootstrap-Review critic.md (erledigt)
+- #29: planner.md why:-Felder im Ausgabeformat
+
+## Letzte Session (2026-03-25) — claude-soul v2.8 + claude-system #16/#17/#18/#36
+
+### claude-soul: Memory-Kontinuität implementiert + deployed (v2.8)
+- **#35a–#35g:** Qdrant vector DB (Docker), @xenova/transformers (local ONNX embeddings), store_memory/recall_memories Tools, start_session mit recent_memories, memory-sanitizer.js (Prompt-Injection-Schutz)
+- **#34:** Staleness-Hint wenn last_updated > 72h
+- **#37:** Fehlermeldung "Proposal nicht gefunden oder abgelaufen" statt 404-Text
+- **Kritische Fixes:** Qdrant braucht UUID/Integer-IDs (nicht beliebige Strings), `await isHealthy()` statt `!isHealthy()`
+- **start_session score threshold:** 0 (nicht 0.3) damit Memories nicht rausgefiltert werden
+- **#35f (Zeitboost):** Backlog, übersprungen
+
+### claude-system: Planner-Workflow-Lücken geschlossen (#16/#17/#18/#36)
+- **#16/#36:** Vor Planner-Spawn Pflichtschritte in CLAUDE.md: `gh issue view` + `projekt.md` lesen
+- **#17:** why:-Pflichtfeld für alle Planner-Entscheidungen (CLAUDE.md + planner.md Template)
+- **#18:** Review-Loop nach Planner-Spawn mit Freigabe-Schritt
+- **#19 (offen):** "Orchestrator prüft Planner-Output nicht gegen Issue-Methodik" — noch nicht umgesetzt
 
 ### Offene Issues (nächste Session)
-- claude-system #10: Integrations-Test nach Deploy (Planner nötig)
-- claude-system #7: Überprüfung Arbeitsprozess Claude-Coder
+- claude-system #19: Explorer-Agent-Pflicht bei Technologie-Entscheidungen
+- claude-soul #35f: Zeitboost für Memories (optional, Backlog)
+- Telegram-Bot reaktivieren (läuft nicht, kein Systemd-Service)
 
-### Lessons Learned
-- Lokale mcp-soul Dateien sind veraltet → immer frischen Clone verwenden
-- Cross-component Bugs (Feldnamen-Mismatch zwischen Dateien) fallen erst in Phase III auf
-- tool_search 2× bei Session-Start: WONTFIX (MCP-Client-Verhalten, nicht server-seitig lösbar)
+## Letzte Session (2026-03-22) — claude-soul v2.4–v2.6 + Security-Fix
 
-## Letzte Session (2026-03-11) — claude-soul V2 dynamische Soul
-- **6 Sub-Issues implementiert + deployed** (#7 → #8-#13), alle Tests bestanden
-- **Neue Tools:** propose_update, confirm_proposal, soul-criteria.json, session-tracker.js
-- **Commits:** 7 Commits auf RangRang416/claude-soul main
+### claude-soul: 4 Issues abgeschlossen + deployed
+- **#30:** may_propose Timing-Fix — registerMessage() vor handleRequest()
+- **#31:** Rate-Limit update_profile — max 5/Session, isError bei Überschreitung
+- **#32:** resume_session Tool — Zeitdelta, Hint aus soul-criteria.json, profile_delta In-Memory
+- **#33:** System-Prompt Verhaltensregeln — Ton-Anpassung, Proaktivität (max 1x/Session), stiller Kontext
+
+### claude-system: Security-Fix
+- Telegram Bot Token war öffentlich (Secret Scanning Alert #1)
+- Token revoked, 6 Dateien bereinigt (${TELEGRAM_BOT_TOKEN}), Alert geschlossen
 
 ## Ältere Sessions
 → Archiviert. Siehe Git-History der jeweiligen Repos.
+- 2026-03-21: claude-system #10/#11/#7 abgeschlossen
+- 2026-03-17: claude-soul v2.2/v2.3, claude-system #8/#9
+- 2026-03-11: claude-soul V2 dynamische Soul (6 Issues, propose_update, confirm_proposal)
 - 2026-03-10: claude-soul V1.0 abgeschlossen (6/6 Issues, MCP-Server, Telegram, Autostart)
 - 2026-03-08: Vorgangs-Manager v1.5 (E-Mail-Import, 2FA, Dedup-Bug, Haiku statt Sonnet)
 - 2026-03-04: Vorgangs-Manager #34 Eval-Set komplett (27/30 PDFs)
